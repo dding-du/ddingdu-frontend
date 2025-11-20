@@ -103,7 +103,11 @@ export default function FindPasswordPage() {
 
   const handleSubmit = async () => {
     try {
-      const message = await authAPI.resetPassword(email, password);
+      const message = await authAPI.resetPassword(
+        email,
+        verificationCode,
+        password
+      );
       alert(message || "비밀번호가 재설정되었습니다.");
       router.push("/login");
     } catch (error) {

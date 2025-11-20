@@ -1,5 +1,5 @@
 import axiosInstance, { tokenManager } from "@/lib/axios";
-import type { ApiResponse, TokenResponseDto } from "./types";
+import type { TokenResponseDto } from "./types";
 
 /**
  * 인증 API
@@ -73,12 +73,17 @@ export const authAPI = {
     return response.data;
   },
 
-  // 비밀번호 찾기
-  resetPassword: async (email: string, newPassword: string) => {
-    const response = await axiosInstance.post<ApiResponse>(
-      "/auth/reset-password",
+  // 비밀번호 재설정
+  resetPassword: async (
+    email: string,
+    verificationCode: string,
+    newPassword: string
+  ) => {
+    const response = await axiosInstance.post<string>(
+      "/api/auth/password/reset",
       {
         email,
+        verificationCode,
         newPassword,
       }
     );
