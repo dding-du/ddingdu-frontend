@@ -265,7 +265,12 @@ export default function SignupPage() {
                 </div>
                 <button
                   onClick={handleResendCode}
-                  className="w-[80px] bg-[#2f4f97] text-white rounded-lg body-m-medium hover:bg-[#264080] transition-colors"
+                  disabled={!isEmailValid}
+                  className={`w-[80px] ${
+                    !isEmailValid
+                      ? "bg-[#b3b7bd] !cursor-default"
+                      : "bg-[#2f4f97]  hover:bg-[#264080]"
+                  } text-white rounded-lg body-m-medium transition-colors`}
                 >
                   {isVerificationSent ? "재전송" : "인증번호"}
                 </button>
