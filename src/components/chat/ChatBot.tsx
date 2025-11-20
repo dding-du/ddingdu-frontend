@@ -115,11 +115,19 @@ export function ChatInput({
         aria-label="전송"
         type="button"
       >
-        <img
-          src="submit.svg"
-          alt="submitButotn"
-          className="w-[32px] h-[32px]"
-        />
+        {value ? (
+          <img
+            src="submitActive.svg"
+            alt="submitButotn"
+            className="w-[32px] h-[32px]"
+          />
+        ) : (
+          <img
+            src="submit.svg"
+            alt="submitButotn"
+            className="w-[32px] h-[32px]"
+          />
+        )}
       </button>
     </div>
   );
