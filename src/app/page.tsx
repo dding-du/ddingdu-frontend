@@ -1,6 +1,6 @@
 "use client";
 
-import { chatAPI } from "@/api";
+import { chatAPI, handleApiError, userAPI } from "@/api";
 import {
   BotMessage,
   ChatInput,
@@ -22,14 +22,8 @@ export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      type: "bot",
-      content:
-        "안녕하세요😋\n명지대학교 강의정보 챗봇 OO이에요!\n\nOO님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!\n얼마든지 물어보세요~",
-      timestamp: Date.now(),
-    },
-  ]);
+  const [userId, setUserId] = useState(0);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   const questions = [
@@ -37,6 +31,40 @@ export default function Home() {
     "우리과에 괜찮은 강의평을 가진 수업 있어?",
     "팀플 없는 강의 알려줘.",
   ];
+
+  // 유저 데이터 가져오기
+  useEffect(() => {
+    const fetchUserAndLectures = async () => {
+      try {
+        // 1. 사용자 정보 조회
+        const userInfo = await userAPI.getMyInfo();
+        setUserId(userInfo.userId);
+
+        // 2. 환영 메시지 추가
+        setMessages([
+          {
+            type: "bot",
+            content: `안녕하세요😋\n명지대학교 강의정보 챗봇 띵듀로이드에요!\n\n${userInfo.name}님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!\n얼마든지 물어보세요~`,
+            timestamp: Date.now(),
+          },
+        ]);
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        console.error("내 강의 조회 오류:", errorMessage);
+
+        // 에러 발생 시 기본 메시지 표시
+        setMessages([
+          {
+            type: "bot",
+            content: `안녕하세요😋\n명지대학교 강의정보 챗봇 띵듀로이드에요!\n\n상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!\n얼마든지 물어보세요~`,
+            timestamp: Date.now(),
+          },
+        ]);
+      }
+    };
+
+    fetchUserAndLectures();
+  }, []);
 
   // 인증 체크
   useEffect(() => {
@@ -100,7 +128,7 @@ export default function Home() {
 
     try {
       // API 호출
-      const response = await chatAPI.sendMessage(text);
+      const response = await chatAPI.sendMessage(userId, text);
 
       // 여러 가능한 경로로 메시지 추출 시도
       let rawMessage: string;

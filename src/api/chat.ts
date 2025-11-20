@@ -6,11 +6,11 @@ import type { ApiResponse, ChatResponseDto } from "./types";
  */
 export const chatAPI = {
   // 메시지 전송
-  sendMessage: async (message: string): Promise<any> => {
+  sendMessage: async (userId: number, message: string): Promise<any> => {
     const response = await axiosInstance.post<ApiResponse<ChatResponseDto>>(
       "/api/chat/stream/test",
       {
-        userId: 2,
+        userId,
         message,
       }
     );
