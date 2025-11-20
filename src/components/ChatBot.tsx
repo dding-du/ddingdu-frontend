@@ -65,7 +65,7 @@ export function RecommendChip({
       onClick={onClick}
       className={`
         bg-white border border-[#dcdfe3]
-        px-[14px] py-[10px] h-8
+        px-[14px]  h-8
         rounded-full
         caption-l-regular text-[#74787e]
         whitespace-nowrap
