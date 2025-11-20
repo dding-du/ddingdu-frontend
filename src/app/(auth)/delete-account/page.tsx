@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from "@/components/common/PageHeader";
 
 export default function DeleteAccountPage() {
   const router = useRouter();

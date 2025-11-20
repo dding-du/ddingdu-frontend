@@ -5,8 +5,8 @@ import {
   ChatInput,
   RecommendChip,
   UserMessage,
-} from "@/components/ChatBot";
-import { Header } from "@/components/Header";
+} from "@/components/chat/ChatBot";
+import { Header } from "@/components/common/Header";
 import { useState } from "react";
 
 export default function Home() {

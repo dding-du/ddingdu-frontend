@@ -5,8 +5,8 @@ import {
   MyClassItem,
   SearchInput,
   SearchResultItem,
-} from "@/components/Search";
-import { PageHeader } from "@/components/PageHeader";
+} from "@/components/search/Search";
+import { PageHeader } from "@/components/common/PageHeader";
 import { useState } from "react";
 
 export default function SearchPage() {

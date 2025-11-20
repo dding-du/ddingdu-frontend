@@ -69,12 +69,12 @@ Font files are in `public/fonts/` with specific naming:
 <p className="body-m-regular">Text</p>
 
 // React components
-import { Headline, Title, Body, Caption } from '@/components/Typography';
+import { Headline, Title, Body, Caption } from '@/components/common/Typography';
 <Headline size="l">Title</Headline>
 <Body size="m" weight="regular">Text</Body>
 
 // Utility functions
-import { getTypographyClass, getTypographyStyle } from '@/styles/typography';
+import { getTypographyClass, getTypographyStyle } from '@/lib/typography';
 ```
 
 ### Styling System
@@ -99,15 +99,27 @@ Enabled in `next.config.ts` with `reactCompiler: true`. This automatically optim
 
 ```
 src/
-├── app/              # Next.js App Router
-│   ├── layout.tsx    # Root layout with font configuration
-│   ├── page.tsx      # Homepage
-│   └── globals.css   # Global styles + typography utilities
-├── components/       # Reusable React components
-│   └── Typography.tsx
-├── styles/          # Style utilities and helpers
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Auth route group
+│   │   ├── delete-account/
+│   │   └── delete-account-confirm/
+│   ├── archive/                  # 강의 보관함
+│   ├── mypage/                   # 마이페이지
+│   ├── layout.tsx                # Root layout with font configuration
+│   ├── page.tsx                  # Homepage (챗봇)
+│   └── globals.css               # Global styles + typography utilities
+├── components/
+│   ├── common/                   # Common components
+│   │   ├── Header.tsx            # GNB header
+│   │   ├── PageHeader.tsx        # Page header
+│   │   └── Typography.tsx        # Typography components
+│   ├── chat/                     # Chat-related components
+│   │   └── ChatBot.tsx
+│   └── search/                   # Search-related components
+│       └── Search.tsx
+├── lib/                          # Utilities and helpers
 │   └── typography.ts
-└── types/           # TypeScript type definitions
+└── types/                        # TypeScript type definitions
     └── typography.ts
 ```
 
