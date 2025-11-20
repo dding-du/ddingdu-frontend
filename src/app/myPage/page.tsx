@@ -26,14 +26,14 @@ export default function MyPage() {
       tokenManager.clearTokens();
 
       // 로그인 페이지로 이동
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       // 에러가 발생해도 로컬 토큰은 삭제하고 로그인 페이지로 이동
       const errorMessage = handleApiError(error);
       console.error("로그아웃 오류:", errorMessage);
 
       tokenManager.clearTokens();
-      router.push("/");
+      router.push("/login");
     }
   };
 

@@ -21,7 +21,7 @@ export default function DeleteAccountConfirmPage() {
       console.log("회원 탈퇴 실행");
       // TODO: 회원 탈퇴 API 호출
       alert("회원 탈퇴가 완료되었습니다.");
-      router.push("/");
+      router.push("/login");
     }
   };
 

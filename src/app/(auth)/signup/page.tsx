@@ -171,7 +171,7 @@ export default function SignupPage() {
       );
 
       alert("회원가입이 완료되었습니다.");
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       const errorMessage = handleApiError(error);
       alert(errorMessage);

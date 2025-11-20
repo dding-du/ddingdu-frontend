@@ -125,7 +125,7 @@ axiosInstance.interceptors.response.use(
         // 리프레시 토큰이 없으면 로그아웃
         tokenManager.clearTokens();
         if (typeof window !== "undefined") {
-          window.location.href = "/";
+          window.location.href = "/login";
         }
         return Promise.reject(error);
       }
@@ -153,7 +153,7 @@ axiosInstance.interceptors.response.use(
         processQueue(refreshError, null);
         tokenManager.clearTokens();
         if (typeof window !== "undefined") {
-          window.location.href = "/";
+          window.location.href = "/login";
         }
         return Promise.reject(refreshError);
       } finally {
