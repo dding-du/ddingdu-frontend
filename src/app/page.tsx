@@ -63,6 +63,22 @@ export default function Home() {
       .join("\n");
   };
 
+  // 마크다운 bold 처리 함수 (**텍스트** -> <strong>텍스트</strong>)
+  const parseMarkdownBold = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        const boldText = part.slice(2, -2);
+        return (
+          <strong key={index} className="font-bold">
+            {boldText}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
@@ -184,7 +200,7 @@ export default function Home() {
                               : "mb-0"
                           }
                         >
-                          {line || "\u00A0"}
+                          {line ? parseMarkdownBold(line) : "\u00A0"}
                         </p>
                       ))}
                   </BotMessage>
