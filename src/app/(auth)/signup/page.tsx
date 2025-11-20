@@ -311,7 +311,7 @@ export default function SignupPage() {
                     !isEmailValid || isSendingCode
                       ? "bg-[#b3b7bd] !cursor-default"
                       : "bg-[#2f4f97]  hover:bg-[#264080]"
-                  } text-white rounded-lg body-m-medium transition-colors flex items-center justify-center`}
+                  } text-white min-w-[60px] rounded-lg body-m-medium transition-colors flex items-center justify-center`}
                 >
                   {isSendingCode ? (
                     <svg
@@ -391,10 +391,10 @@ export default function SignupPage() {
                     onChange={(e) => setVerificationCode(e.target.value)}
                     placeholder="인증번호"
                     maxLength={6}
-                    className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
+                    className="flex-1 bg-transparent body-m-regular  text-[#101010] placeholder:text-[#b3b7bd] outline-none"
                   />
-                  {!isVerified && (
-                    <span className="caption-m-regular text-[#f93838]">
+                  {isVerificationSent && !isVerified && (
+                    <span className="caption-m-regular text-[#f93838] shrink-0">
                       {Math.floor(timeLeft / 60)}:
                       {String(timeLeft % 60).padStart(2, "0")}
                     </span>
@@ -428,7 +428,7 @@ export default function SignupPage() {
                     isVerifying
                       ? "bg-[#b3b7bd] !cursor-default"
                       : "bg-[#2f4f97] hover:bg-[#264080]"
-                  } text-white rounded-lg body-m-medium transition-colors flex items-center justify-center`}
+                  } text-white min-w-[60px] rounded-lg body-m-medium transition-colors flex items-center justify-center`}
                 >
                   {isVerifying ? (
                     <svg
