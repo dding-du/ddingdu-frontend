@@ -20,7 +20,7 @@ export default function SignupPage() {
   const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [major, setMajor] = useState(majors[0]);
+  const [major, setMajor] = useState("");
 
   // Visibility states
   const [showPassword, setShowPassword] = useState(false);
@@ -579,7 +579,11 @@ export default function SignupPage() {
                 onClick={() => setShowMajorDropdown(!showMajorDropdown)}
                 className="w-full bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] flex items-center justify-between body-m-regular text-[#101010]"
               >
-                <span>{major}</span>
+                {major === "" ? (
+                  <span className="text-[#c7cacf]">전공</span>
+                ) : (
+                  <span>{major}</span>
+                )}
                 <svg
                   width="14"
                   height="14"
