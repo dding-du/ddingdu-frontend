@@ -24,7 +24,7 @@ export function Header({
   const router = useRouter();
 
   const onProfileClick = () => {
-    router.push("/mypage");
+    router.push("/myPage");
   };
 
   const onArchiveClick = () => {
