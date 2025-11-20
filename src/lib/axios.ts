@@ -1,5 +1,5 @@
 import axios from "axios";
-import { authAPI } from "./api";
+import { authAPI } from "../api/api";
 
 // API Base URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;

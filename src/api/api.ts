@@ -1,4 +1,4 @@
-import axiosInstance, { tokenManager } from "./axios";
+import axiosInstance, { tokenManager } from "../lib/axios";
 
 /**
  * API 응답 타입
