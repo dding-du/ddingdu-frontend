@@ -118,7 +118,12 @@ export default function FindPasswordPage() {
                 />
                 <button
                   onClick={handleSendCode}
-                  className="w-[80px] bg-[#2f4f97] text-white rounded-lg body-m-medium hover:bg-[#264080] transition-colors"
+                  disabled={!isEmailValid}
+                  className={`w-[80px] ${
+                    !isEmailValid
+                      ? "bg-[#b3b7bd] !cursor-default"
+                      : "bg-[#2f4f97]  hover:bg-[#264080]"
+                  } text-white rounded-lg body-m-medium transition-colors`}
                 >
                   {isVerificationSent ? "재전송" : "인증번호"}
                 </button>
@@ -158,7 +163,12 @@ export default function FindPasswordPage() {
                 />
                 <button
                   onClick={handleVerify}
-                  className="w-[80px] bg-[#2f4f97] text-white rounded-lg body-m-medium hover:bg-[#264080] transition-colors"
+                  disabled={verificationCode === ""}
+                  className={`w-[80px] ${
+                    verificationCode === ""
+                      ? "bg-[#b3b7bd] !cursor-default"
+                      : "bg-[#2f4f97]  hover:bg-[#264080]"
+                  } text-white rounded-lg body-m-medium  transition-colors`}
                 >
                   확인
                 </button>
@@ -184,201 +194,227 @@ export default function FindPasswordPage() {
             </div>
           </div>
 
-          {/* 새 비밀번호 입력 */}
-          <div className="px-8 flex flex-col gap-1">
-            <div className="bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] flex items-center gap-2">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={handlePasswordChange}
-                placeholder="새 비밀번호"
-                className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
-              />
-              <button
-                onClick={() => setShowPassword(!showPassword)}
-                className="w-[18px] h-[18px] flex items-center justify-center shrink-0"
-              >
-                {showPassword ? (
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path
-                      d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9 11.25C10.2426 11.25 11.25 10.2426 11.25 9C11.25 7.75736 10.2426 6.75 9 6.75C7.75736 6.75 6.75 7.75736 6.75 9C6.75 10.2426 7.75736 11.25 9 11.25Z"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path
-                      d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M3 15L15 3"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex items-center gap-1">
-                <span
-                  className={`caption-m-regular ${
-                    hasEnglish ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
-                  }`}
-                >
-                  영문 포함
-                </span>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M3 7L6 10L11 4"
-                    stroke={hasEnglish ? "#3e6fd0" : "#b3b7bd"}
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+          {isVerified && (
+            <div className="flex flex-col gap-6">
+              {/* 새 비밀번호 입력 */}
+              <div className="px-8 flex flex-col gap-1">
+                <div className="bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] flex items-center gap-2">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="새 비밀번호"
+                    className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
                   />
-                </svg>
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="w-[18px] h-[18px] flex items-center justify-center shrink-0"
+                  >
+                    {showPassword ? (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                      >
+                        <path
+                          d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M9 11.25C10.2426 11.25 11.25 10.2426 11.25 9C11.25 7.75736 10.2426 6.75 9 6.75C7.75736 6.75 6.75 7.75736 6.75 9C6.75 10.2426 7.75736 11.25 9 11.25Z"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                      >
+                        <path
+                          d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M3 15L15 3"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`caption-m-regular ${
+                        hasEnglish ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
+                      }`}
+                    >
+                      영문 포함
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path
+                        d="M3 7L6 10L11 4"
+                        stroke={hasEnglish ? "#3e6fd0" : "#b3b7bd"}
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`caption-m-regular ${
+                        hasNumber ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
+                      }`}
+                    >
+                      숫자 포함
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path
+                        d="M3 7L6 10L11 4"
+                        stroke={hasNumber ? "#3e6fd0" : "#b3b7bd"}
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`caption-m-regular ${
+                        hasSpecialChar ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
+                      }`}
+                    >
+                      특수문자 포함
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path
+                        d="M3 7L6 10L11 4"
+                        stroke={hasSpecialChar ? "#3e6fd0" : "#b3b7bd"}
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`caption-m-regular ${
+                        isPasswordLengthValid
+                          ? "text-[#3e6fd0]"
+                          : "text-[#b3b7bd]"
+                      }`}
+                    >
+                      8~20자 이내
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path
+                        d="M3 7L6 10L11 4"
+                        stroke={isPasswordLengthValid ? "#3e6fd0" : "#b3b7bd"}
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span
-                  className={`caption-m-regular ${
-                    hasNumber ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
-                  }`}
-                >
-                  숫자 포함
-                </span>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M3 7L6 10L11 4"
-                    stroke={hasNumber ? "#3e6fd0" : "#b3b7bd"}
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-              <div className="flex items-center gap-1">
-                <span
-                  className={`caption-m-regular ${
-                    hasSpecialChar ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
-                  }`}
-                >
-                  특수문자 포함
-                </span>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M3 7L6 10L11 4"
-                    stroke={hasSpecialChar ? "#3e6fd0" : "#b3b7bd"}
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-              <div className="flex items-center gap-1">
-                <span
-                  className={`caption-m-regular ${
-                    isPasswordLengthValid ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
-                  }`}
-                >
-                  8~20자 이내
-                </span>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M3 7L6 10L11 4"
-                    stroke={isPasswordLengthValid ? "#3e6fd0" : "#b3b7bd"}
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
 
-          {/* 비밀번호 확인 입력 */}
-          <div className="px-8 flex flex-col gap-1">
-            <div className="bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] flex items-center gap-2">
-              <input
-                type={showPasswordConfirm ? "text" : "password"}
-                value={passwordConfirm}
-                onChange={handlePasswordConfirmChange}
-                placeholder="새 비밀번호 확인"
-                className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
-              />
-              <button
-                onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
-                className="w-[18px] h-[18px] flex items-center justify-center shrink-0"
-              >
-                {showPasswordConfirm ? (
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              {/* 비밀번호 확인 입력 */}
+              <div className="px-8 flex flex-col gap-1">
+                <div className="bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] flex items-center gap-2">
+                  <input
+                    type={showPasswordConfirm ? "text" : "password"}
+                    value={passwordConfirm}
+                    onChange={handlePasswordConfirmChange}
+                    placeholder="새 비밀번호 확인"
+                    className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
+                  />
+                  <button
+                    onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                    className="w-[18px] h-[18px] flex items-center justify-center shrink-0"
+                  >
+                    {showPasswordConfirm ? (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                      >
+                        <path
+                          d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M9 11.25C10.2426 11.25 11.25 10.2426 11.25 9C11.25 7.75736 10.2426 6.75 9 6.75C7.75736 6.75 6.75 7.75736 6.75 9C6.75 10.2426 7.75736 11.25 9 11.25Z"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                      >
+                        <path
+                          d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M3 15L15 3"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span
+                    className={`caption-m-regular ${
+                      isPasswordMatch ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
+                    }`}
+                  >
+                    비밀번호 일치
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path
-                      d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9 11.25C10.2426 11.25 11.25 10.2426 11.25 9C11.25 7.75736 10.2426 6.75 9 6.75C7.75736 6.75 6.75 7.75736 6.75 9C6.75 10.2426 7.75736 11.25 9 11.25Z"
-                      stroke="#B3B7BD"
+                      d="M3 7L6 10L11 4"
+                      stroke={isPasswordMatch ? "#3e6fd0" : "#b3b7bd"}
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                   </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path
-                      d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M3 15L15 3"
-                      stroke="#B3B7BD"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                )}
-              </button>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <span
-                className={`caption-m-regular ${
-                  isPasswordMatch ? "text-[#3e6fd0]" : "text-[#b3b7bd]"
-                }`}
-              >
-                비밀번호 일치
-              </span>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M3 7L6 10L11 4"
-                  stroke={isPasswordMatch ? "#3e6fd0" : "#b3b7bd"}
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
+          )}
 
           {/* 제출 버튼 */}
           <div className="px-8 py-2">
