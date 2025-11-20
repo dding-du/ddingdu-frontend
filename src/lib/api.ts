@@ -1,4 +1,4 @@
-import axiosInstance from "./axios";
+import axiosInstance, { tokenManager } from "./axios";
 
 /**
  * API 응답 타입
@@ -94,6 +94,16 @@ export const authAPI = {
   // 로그아웃
   logout: async () => {
     const response = await axiosInstance.post<string>("/api/auth/logout");
+    return response.data;
+  },
+
+  // 리프래쉬
+  refresh: async () => {
+    const refreshToken = tokenManager.getRefreshToken();
+    const response = await axiosInstance.post<TokenResponseDto>(
+      `/api/auth/refresh`,
+      { refreshToken }
+    );
     return response.data;
   },
 };

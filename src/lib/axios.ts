@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { TokenResponseDto } from "./api";
+import { authAPI } from "./api";
 
 // API Base URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -132,12 +132,14 @@ axiosInstance.interceptors.response.use(
 
       try {
         // 토큰 갱신 API 호출
-        const response = await axios.post<TokenResponseDto>(
-          `${API_BASE_URL}/api/auth/refresh`,
-          { refreshToken }
-        );
+        // const response = await axios.post<TokenResponseDto>(
+        //   `${API_BASE_URL}/api/auth/refresh`,
+        //   { refreshToken }
+        // );
 
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
+        const response = await authAPI.refresh();
+
+        const { accessToken, refreshToken: newRefreshToken } = response;
 
         // 새 토큰 저장
         tokenManager.setTokens(accessToken, newRefreshToken);
