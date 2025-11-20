@@ -63,8 +63,7 @@ export default function LoginPage() {
   };
 
   const handleSignup = () => {
-    console.log("회원가입");
-    // TODO: 회원가입 페이지로 이동
+    router.push("/signup");
   };
 
   const isLoginEnabled = email.trim() !== "" && password.trim() !== "";
