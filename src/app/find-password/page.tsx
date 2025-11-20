@@ -30,6 +30,8 @@ export default function FindPasswordPage() {
   // Timer and verification sent state
   const [timeLeft, setTimeLeft] = useState(299); // 4:59
   const [isVerificationSent, setIsVerificationSent] = useState(false);
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   // Timer effect
   useEffect(() => {
@@ -77,6 +79,7 @@ export default function FindPasswordPage() {
   };
 
   const handleSendCode = async () => {
+    setIsSendingCode(true);
     try {
       // 비밀번호 재설정 요청 API 사용 (재전송 기능 없음, 매번 새로 요청)
       const message = await authAPI.requestPasswordReset(email);
@@ -87,10 +90,13 @@ export default function FindPasswordPage() {
     } catch (error) {
       const errorMessage = handleApiError(error);
       alert(errorMessage);
+    } finally {
+      setIsSendingCode(false);
     }
   };
 
   const handleVerify = async () => {
+    setIsVerifying(true);
     try {
       const message = await authAPI.verifyCode(email, verificationCode);
       setIsVerified(true);
@@ -98,6 +104,8 @@ export default function FindPasswordPage() {
     } catch (error) {
       const errorMessage = handleApiError(error);
       alert(errorMessage);
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -146,14 +154,39 @@ export default function FindPasswordPage() {
                 />
                 <button
                   onClick={handleSendCode}
-                  disabled={!isEmailValid}
+                  disabled={!isEmailValid || isSendingCode}
                   className={`w-[80px] ${
-                    !isEmailValid
+                    !isEmailValid || isSendingCode
                       ? "bg-[#b3b7bd] !cursor-default"
                       : "bg-[#2f4f97]  hover:bg-[#264080]"
-                  } text-white rounded-lg body-m-medium transition-colors`}
+                  } text-white rounded-lg body-m-medium transition-colors flex items-center justify-center`}
                 >
-                  {isVerificationSent ? "재전송" : "인증번호"}
+                  {isSendingCode ? (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : isVerificationSent ? (
+                    "재전송"
+                  ) : (
+                    "인증번호"
+                  )}
                 </button>
               </div>
             </div>
@@ -220,14 +253,37 @@ export default function FindPasswordPage() {
                 </div>
                 <button
                   onClick={handleVerify}
-                  disabled={verificationCode === ""}
+                  disabled={verificationCode === "" || isVerifying}
                   className={`w-[80px] ${
-                    verificationCode === ""
+                    verificationCode === "" || isVerifying
                       ? "bg-[#b3b7bd] !cursor-default"
                       : "bg-[#2f4f97]  hover:bg-[#264080]"
-                  } text-white rounded-lg body-m-medium  transition-colors`}
+                  } text-white rounded-lg body-m-medium transition-colors flex items-center justify-center`}
                 >
-                  확인
+                  {isVerifying ? (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    "확인"
+                  )}
                 </button>
               </div>
             </div>
