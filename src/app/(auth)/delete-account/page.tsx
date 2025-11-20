@@ -90,14 +90,14 @@ export default function DeleteAccountPage() {
                   disabled={!isValid}
                   className={`
                   w-full
-                  ${isValid ? "bg-[#87a7e8]" : "bg-[#c7cacf]"}
+                  ${isValid ? "bg-[#2f4f97]" : "bg-[#c7cacf]"}
                   text-white
                   px-2 py-3
                   rounded-lg
                   body-m-medium
                   text-center
                   transition-colors
-                  ${isValid ? "hover:bg-[#7599d9]" : "cursor-not-allowed"}
+                  ${isValid ? "hover:bg-[#264080]" : "cursor-not-allowed"}
                 `}
                 >
                   다음

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { PageHeader } from '@/components/common/PageHeader';
+import { PageHeader } from "@/components/common/PageHeader";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function DeleteAccountConfirmPage() {
   const router = useRouter();
@@ -15,11 +15,13 @@ export default function DeleteAccountConfirmPage() {
   const handleDeleteAccount = () => {
     if (!isChecked) return;
 
-    if (confirm('정말로 회원 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-      console.log('회원 탈퇴 실행');
+    if (
+      confirm("정말로 회원 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")
+    ) {
+      console.log("회원 탈퇴 실행");
       // TODO: 회원 탈퇴 API 호출
-      alert('회원 탈퇴가 완료되었습니다.');
-      router.push('/');
+      alert("회원 탈퇴가 완료되었습니다.");
+      router.push("/");
     }
   };
 
@@ -141,14 +143,18 @@ export default function DeleteAccountConfirmPage() {
               disabled={!isChecked}
               className={`
               w-full
-              ${isChecked ? 'bg-[#87a7e8]' : 'bg-[#c7cacf]'}
+              ${isChecked ? "bg-[#2f4f97]" : "bg-[#c7cacf]"}
               text-white
               px-2 py-3
               rounded-lg
               body-m-medium
               text-center
               transition-colors
-              ${isChecked ? 'hover:bg-[#7599d9] cursor-pointer' : 'cursor-not-allowed'}
+              ${
+                isChecked
+                  ? "hover:bg-[#264080] cursor-pointer"
+                  : "cursor-not-allowed"
+              }
             `}
             >
               회원 탈퇴
