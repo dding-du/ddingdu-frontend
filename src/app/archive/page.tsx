@@ -189,7 +189,7 @@ export default function SearchPage() {
             value={searchQuery}
             onChange={setSearchQuery}
             onClear={handleClearSearch}
-            placeholder="검색어를 입력하세요"
+            placeholder="강의명, 강의번호, 교수명 검색"
           />
         </div>
 
