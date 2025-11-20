@@ -48,6 +48,10 @@ body {
   font-family: var(--font-pretendard), var(--font-gmarket), sans-serif;
 }
 
+button {
+  cursor: pointer;
+}
+
 /* Typography Utilities */
 @layer utilities {
   /* Headline Styles */
