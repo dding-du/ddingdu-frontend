@@ -1,13 +1,16 @@
 "use client";
 
 import { PageHeader } from "@/components/common/PageHeader";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function DeleteAccountPage() {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -21,10 +24,10 @@ export default function DeleteAccountPage() {
     }
 
     // TODO: 비밀번호 확인 API 호출
-    console.log("비밀번호 확인:", password);
-
     // 비밀번호 확인 성공 시 최종 확인 페이지로 이동
-    router.push("/delete-account-confirm");
+    router.push(
+      `${type === "myPage" ? "change-password" : "/delete-account-confirm"}`
+    );
   };
 
   const handleFindPassword = () => {

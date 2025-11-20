@@ -13,7 +13,7 @@ export default function MyPage() {
   };
 
   const handleEditPassword = () => {
-    console.log("비밀번호 수정");
+    router.push("/delete-account?type=myPage");
     // TODO: 비밀번호 변경 페이지로 이동
   };
 
