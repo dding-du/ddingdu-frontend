@@ -127,7 +127,7 @@ export default function FindPasswordPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* 헤더 */}
-      <PageHeader title="비밀번호 찾기" showBack />
+      <PageHeader title="비밀번호 변경" showBack />
 
       {/* 메인 컨텐츠 */}
       <div className="max-w-[520px] mx-auto w-full">
