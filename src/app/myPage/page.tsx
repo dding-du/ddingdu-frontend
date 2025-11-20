@@ -1,6 +1,6 @@
 "use client";
 
-import { authAPI, handleApiError } from "@/api/api";
+import { authAPI, handleApiError } from "@/api";
 import { PageHeader } from "@/components/common/PageHeader";
 import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
