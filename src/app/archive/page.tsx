@@ -1,12 +1,12 @@
 "use client";
 
+import { PageHeader } from "@/components/common/PageHeader";
 import {
   BottomSheet,
   MyClassItem,
   SearchInput,
   SearchResultItem,
 } from "@/components/search/Search";
-import { PageHeader } from "@/components/common/PageHeader";
 import { useState } from "react";
 
 export default function SearchPage() {
@@ -114,7 +114,7 @@ export default function SearchPage() {
         </div>
 
         {/* 하단 바텀시트 */}
-        <div className="absolute bottom-0 left-0 right-0 w-full">
+        <div className="fixed justify-center bottom-0 left-0 right-0 max-w-[520px] w-full mx-auto">
           <BottomSheet
             title="내 강의"
             isExpanded={isBottomSheetExpanded}
