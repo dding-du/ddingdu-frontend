@@ -46,6 +46,14 @@ export default function Home() {
     }
   }, [router]);
 
+  // API 응답에서 "data:" 접두사 제거하는 함수
+  const cleanResponseContent = (content: string): string => {
+    return content
+      .split("\n")
+      .map((line) => line.replace(/^data:/, "").trim())
+      .join("\n");
+  };
+
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
@@ -65,14 +73,13 @@ export default function Home() {
 
       console.log(response);
 
+      const rawMessage = response || "응답을 받지 못했습니다.";
+      const cleanedContent = cleanResponseContent(rawMessage);
+
       // 봇 응답 추가
       const botMessage: Message = {
         type: "bot",
-        content:
-          response.data?.message ||
-          response.message ||
-          response ||
-          "응답을 받지 못했습니다.",
+        content: cleanedContent,
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, botMessage]);

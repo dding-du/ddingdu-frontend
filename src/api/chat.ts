@@ -6,7 +6,7 @@ import type { ApiResponse, ChatResponseDto } from "./types";
  */
 export const chatAPI = {
   // 메시지 전송
-  sendMessage: async (message: string) => {
+  sendMessage: async (message: string): Promise<string> => {
     const response = await axiosInstance.post<ApiResponse<ChatResponseDto>>(
       "/api/chat/stream/test",
       {
@@ -14,6 +14,6 @@ export const chatAPI = {
         message,
       }
     );
-    return response.data;
+    return response.data.data?.message || "";
   },
 };
