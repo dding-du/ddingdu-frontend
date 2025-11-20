@@ -1,4 +1,4 @@
-# 띵두 (ddingdu-frontend)
+# 띵듀로이드 (ddingduroid)
 
 [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 
@@ -8,7 +8,7 @@
 
 ## 프로젝트 소개
 
-`띵두`는 명지대학교 학생들을 위해 만들어진 AI 기반 강의 정보 제공 챗봇입니다. 복잡하고 흩어져 있는 강의 정보를 손쉽게 얻을 수 있도록, 대화형 인터페이스를 통해 맞춤형 정보를 제공하는 것을 목표로 합니다.
+`띵듀로이드`는 명지대학교 학생들을 위해 만들어진 AI 기반 강의 정보 제공 챗봇입니다. 복잡하고 흩어져 있는 강의 정보를 손쉽게 얻을 수 있도록, 대화형 인터페이스를 통해 맞춤형 정보를 제공하는 것을 목표로 합니다.
 
 <br/>
 
@@ -43,8 +43,8 @@
 1.  **레포지토리 클론:**
 
     ```bash
-    git clone https://github.com/your-username/ddingdu-frontend.git
-    cd ddingdu-frontend
+    git clone https://github.com/your-username/ddingduroid.git
+    cd ddingduroid
     ```
 
 2.  **의존성 설치:**
