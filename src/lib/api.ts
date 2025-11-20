@@ -37,8 +37,17 @@ export const authAPI = {
 
   // 이메일 인증번호 전송
   sendVerificationCode: async (email: string) => {
-    const response = await axiosInstance.post<ApiResponse>(
-      "/auth/send-verification",
+    const response = await axiosInstance.post<string>(
+      "/api/auth/email/send",
+      { email }
+    );
+    return response.data;
+  },
+
+  // 이메일 인증번호 재전송 (1분 쿨다운)
+  resendVerificationCode: async (email: string) => {
+    const response = await axiosInstance.post<string>(
+      "/api/auth/email/resend",
       { email }
     );
     return response.data;
@@ -46,7 +55,7 @@ export const authAPI = {
 
   // 인증번호 확인
   verifyCode: async (email: string, code: string) => {
-    const response = await axiosInstance.post<ApiResponse>("/auth/verify-code", {
+    const response = await axiosInstance.post<string>("/api/auth/email/verify", {
       email,
       code,
     });

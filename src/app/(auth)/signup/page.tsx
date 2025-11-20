@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { authAPI, handleApiError } from "@/lib/api";
 
 const majors = [
   "응용소프트웨어전공",
@@ -42,6 +43,14 @@ export default function SignupPage() {
   // Timer and verification sent state
   const [timeLeft, setTimeLeft] = useState(299); // 4:59
   const [isVerificationSent, setIsVerificationSent] = useState(false);
+
+  // Timer effect
+  useEffect(() => {
+    if (isVerificationSent && timeLeft > 0 && !isVerified) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isVerificationSent, timeLeft, isVerified]);
 
   const validateStudentId = (id: string) => {
     const isValid = /^\d{8}$/.test(id);
@@ -114,17 +123,30 @@ export default function SignupPage() {
     setVerificationCode("");
   };
 
-  const handleResendCode = () => {
-    console.log("인증번호 전송/재전송");
-    setIsVerificationSent(true);
-    setTimeLeft(299);
-    // TODO: 인증번호 전송 API 호출
+  const handleResendCode = async () => {
+    try {
+      const message = isVerificationSent
+        ? await authAPI.resendVerificationCode(email)
+        : await authAPI.sendVerificationCode(email);
+
+      setIsVerificationSent(true);
+      setTimeLeft(299);
+      alert(message);
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      alert(errorMessage);
+    }
   };
 
-  const handleVerify = () => {
-    console.log("인증 확인");
-    // TODO: 인증 확인 API 호출
-    setIsVerified(true);
+  const handleVerify = async () => {
+    try {
+      const message = await authAPI.verifyCode(email, verificationCode);
+      setIsVerified(true);
+      alert(message);
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      alert(errorMessage);
+    }
   };
 
   const handleSignup = () => {
