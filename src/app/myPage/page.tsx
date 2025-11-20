@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { PageHeader } from "@/components/common/PageHeader";
 
 export default function MyPage() {
   const router = useRouter();
@@ -9,96 +10,81 @@ export default function MyPage() {
     router.back();
   };
 
-  const handleEditId = () => {
-    console.log("아이디 수정");
-  };
-
   const handleEditPassword = () => {
     console.log("비밀번호 수정");
+    // TODO: 비밀번호 변경 페이지로 이동
   };
 
   const handleLogout = () => {
     console.log("로그아웃");
     router.push("/");
-    // 로그아웃 로직 구현
+    // TODO: 로그아웃 API 호출
   };
 
   const handleDeleteAccount = () => {
-    // 비밀번호 확인 페이지로 이동
     router.push("/delete-account");
   };
 
-  // 아이콘
-  const IconArrowDown = () => {
-    return (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 18 18"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="rotate-[-90deg]"
-      >
-        <path
-          d="M4.5 6.75L9 11.25L13.5 6.75"
-          stroke="#A3A7AD"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
+  // 사용자 정보 (실제로는 API에서 가져와야 함)
+  const userInfo = {
+    studentId: "60261121",
+    name: "홍길동",
+    email: "ddingdu@mju.ac.kr",
+    password: "●●●●●●●●●",
+    major: "데이터사이언스전공",
   };
 
   return (
     <div className="min-h-screen bg-white">
       {/* 헤더 */}
-      <header className="bg-white flex items-center gap-2 px-5 pt-6 pb-4">
-        <h1
-          className="flex-1 text-[18px] font-medium leading-[23px] text-[#101010]"
-          style={{ fontFamily: "var(--font-gmarket), sans-serif" }}
-        >
-          마이페이지
-        </h1>
-        <button
-          onClick={handleClose}
-          className="w-6 h-6 flex items-center justify-center"
-          aria-label="닫기"
-          type="button"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="#44474C"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-      </header>
+      <PageHeader title="마이페이지" showClose onClose={handleClose} />
 
       {/* 메인 컨텐츠 */}
       <div className="max-w-[520px] mx-auto w-full">
-        <div className="flex flex-col gap-6 mt-6">
+        <div className="flex flex-col gap-12 mt-6">
           {/* 사용자 정보 섹션 */}
           <div className="flex flex-col">
-            {/* 아이디 */}
-            <button
-              onClick={handleEditId}
-              className="flex items-center justify-between px-8 py-4 hover:bg-[#f0f2f5] transition-colors"
-            >
-              <span className="flex-1 flex flex-start body-l-regular text-[#101010]">
+            {/* 학번 */}
+            <div className="flex items-center justify-between px-8 py-4">
+              <span className="flex-1 body-l-regular text-[#101010]">학번</span>
+              <span className="body-m-regular text-[#74787e]">
+                {userInfo.studentId}
+              </span>
+            </div>
+
+            {/* 이름(닉네임) */}
+            <div className="flex items-center justify-between px-8 py-4">
+              <span className="flex-1 body-l-regular text-[#101010]">
+                이름(닉네임)
+              </span>
+              <span className="body-m-regular text-[#74787e]">
+                {userInfo.name}
+              </span>
+            </div>
+
+            {/* 이메일 */}
+            <div className="flex items-center justify-between px-8 py-4">
+              <span className="flex-1 body-l-regular text-[#101010]">
                 이메일
               </span>
+              <span className="body-m-regular text-[#74787e]">
+                {userInfo.email}
+              </span>
+            </div>
+
+            {/* 비밀번호 */}
+            <button
+              onClick={handleEditPassword}
+              className="flex items-center justify-between px-8 py-4 hover:bg-[#f0f2f5] transition-colors"
+            >
+              <span className="flex-1 body-l-regular text-[#101010]">
+                비밀번호
+              </span>
               <div className="flex items-center gap-4">
-                <span className="body-m-regular text-[#74787e]">admin</span>
-                {/* <svg
+                <span className="body-m-regular text-[#74787e]">
+                  {userInfo.password}
+                </span>
+                <svg
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -113,24 +99,17 @@ export default function MyPage() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                </svg> */}
-                <div className="w-[18px]" />
+                </svg>
               </div>
             </button>
 
-            {/* 비밀번호 */}
-            <button
-              onClick={handleEditPassword}
-              className="flex items-center justify-between px-8 py-4 hover:bg-[#f0f2f5] transition-colors"
-            >
-              <span className="flex flex-start body-l-regular text-[#101010]">
-                비밀번호
+            {/* 전공 */}
+            <div className="flex items-center justify-between px-8 py-4">
+              <span className="flex-1 body-l-regular text-[#101010]">전공</span>
+              <span className="body-m-regular text-[#74787e]">
+                {userInfo.major}
               </span>
-              <div className="flex items-center gap-4">
-                <span className="body-m-regular text-[#74787e]">●●●●●●●●●</span>
-                <IconArrowDown />
-              </div>
-            </button>
+            </div>
           </div>
 
           {/* 버튼 섹션 */}

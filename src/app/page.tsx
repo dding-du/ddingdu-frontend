@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [autoLogin, setAutoLogin] = useState(false);
 
   const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@mju\.ac\.kr$/;
     return emailRegex.test(email);
   };
 
