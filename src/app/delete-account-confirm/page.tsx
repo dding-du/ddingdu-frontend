@@ -2,14 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PageHeader } from '@/components/PageHeader';
 
 export default function DeleteAccountConfirmPage() {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
-
-  const handleBack = () => {
-    router.back();
-  };
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -29,36 +26,7 @@ export default function DeleteAccountConfirmPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* 헤더 */}
-      <header className="bg-white flex items-center gap-2 px-5 pt-6 pb-4">
-        <button
-          onClick={handleBack}
-          className="w-6 h-6 flex items-center justify-center"
-          aria-label="뒤로가기"
-          type="button"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15 18L9 12L15 6"
-              stroke="#44474C"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-        <h1
-          className="flex-1 text-[18px] font-medium leading-[23px] text-[#101010]"
-          style={{ fontFamily: 'var(--font-gmarket), sans-serif' }}
-        >
-          회원 탈퇴
-        </h1>
-      </header>
+      <PageHeader title="회원 탈퇴" showBack />
 
       {/* 메인 컨텐츠 */}
       <div className="flex flex-col gap-6 mt-6">

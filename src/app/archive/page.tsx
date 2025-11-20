@@ -6,13 +6,11 @@ import {
   SearchInput,
   SearchResultItem,
 } from "@/components/Search";
+import { PageHeader } from "@/components/PageHeader";
 import { useState } from "react";
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("인공지능");
-  const [favorites, setFavorites] = useState<Set<string>>(
-    new Set(["인공지능", "인공지능 윤리"])
-  );
 
   // 내 강의 목록 상태 (동적으로 추가/제거 가능)
   const [myClasses, setMyClasses] = useState<string[]>([
@@ -55,19 +53,6 @@ export default function SearchPage() {
     className.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // 검색 결과에서 즐겨찾기 토글 (별 표시용)
-  const handleToggleFavorite = (text: string) => {
-    setFavorites((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(text)) {
-        newSet.delete(text);
-      } else {
-        newSet.add(text);
-      }
-      return newSet;
-    });
-  };
-
   // 검색 결과를 내 강의에 추가
   const handleAddToMyClass = (className: string) => {
     if (!myClasses.includes(className)) {
@@ -102,35 +87,7 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
       {/* 상단 헤더 */}
-      <header className="bg-white flex items-center gap-2 px-5 pt-6 pb-4">
-        <h1
-          className="flex-1 text-[18px] font-medium leading-[23px] text-[#101010]"
-          style={{ fontFamily: "var(--font-gmarket), sans-serif" }}
-        >
-          강의 보관함
-        </h1>
-        <button
-          onClick={handleClose}
-          className="w-6 h-6 flex items-center justify-center"
-          aria-label="닫기"
-          type="button"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="#44474C"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-      </header>
+      <PageHeader title="강의 보관함" showClose onClose={handleClose} />
 
       {/* 검색 입력창 */}
       <div className="px-5 py-2">
