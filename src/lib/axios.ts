@@ -100,7 +100,11 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // 401 에러이고 아직 재시도하지 않은 경우
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 ||
+      error.response?.status === 403 ||
+      !originalRequest._retry
+    ) {
       if (isRefreshing) {
         // 이미 토큰 갱신 중이면 대기열에 추가
         return new Promise((resolve, reject) => {
