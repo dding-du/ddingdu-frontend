@@ -34,11 +34,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* 헤더 */}
-      <Header
-        serviceName="MyPlace"
-        onProfileClick={handleProfileClick}
-        onArchiveClick={handleArchiveClick}
-      />
+      <Header serviceName="MyPlace" />
 
       {/* 채팅 영역 */}
       <main className="flex-1 overflow-y-auto">

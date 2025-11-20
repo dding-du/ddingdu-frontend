@@ -1,7 +1,9 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 interface HeaderProps {
   serviceName?: string;
-  onProfileClick?: () => void;
-  onArchiveClick?: () => void;
   className?: string;
 }
 
@@ -19,6 +21,16 @@ export function Header({
   serviceName = "((서비스명))",
   className = "",
 }: HeaderProps) {
+  const router = useRouter();
+
+  const onProfileClick = () => {
+    router.push("/");
+  };
+
+  const onArchiveClick = () => {
+    router.push("/archive");
+  };
+
   return (
     <header
       className={`
