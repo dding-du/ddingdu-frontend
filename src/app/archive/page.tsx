@@ -13,27 +13,9 @@ export default function SearchPage() {
   const [favorites, setFavorites] = useState<Set<string>>(
     new Set(['인공지능', '인공지능 윤리'])
   );
-  const [myClassFavorites, setMyClassFavorites] = useState<Set<string>>(
-    new Set([
-      '기초프로그래밍2',
-      '기독교와문화',
-      '4차산업혁명을위한비판적사고',
-      '영어2',
-      '영어회화1',
-      '채플',
-      '문화리터러시와창의적스토리텔링',
-      '인공지능의세계',
-      '환경과웰빙(KCU)',
-    ])
-  );
 
-  const searchResults = [
-    '인공지능',
-    '인공지능 세계',
-    '인공지능 윤리',
-  ];
-
-  const myClasses = [
+  // 내 강의 목록 상태 (동적으로 추가/제거 가능)
+  const [myClasses, setMyClasses] = useState<string[]>([
     '기초프로그래밍2',
     '기독교와문화',
     '4차산업혁명을위한비판적사고',
@@ -43,8 +25,34 @@ export default function SearchPage() {
     '문화리터러시와창의적스토리텔링',
     '인공지능의세계',
     '환경과웰빙(KCU)',
+  ]);
+
+  // 검색 가능한 전체 강의 목록
+  const allClasses = [
+    '인공지능',
+    '인공지능 세계',
+    '인공지능 윤리',
+    '기초프로그래밍2',
+    '기독교와문화',
+    '4차산업혁명을위한비판적사고',
+    '영어2',
+    '영어회화1',
+    '채플',
+    '문화리터러시와창의적스토리텔링',
+    '인공지능의세계',
+    '환경과웰빙(KCU)',
+    '데이터구조',
+    '알고리즘',
+    '웹프로그래밍',
+    '모바일프로그래밍',
   ];
 
+  // 검색어에 맞는 강의 필터링
+  const searchResults = allClasses.filter((className) =>
+    className.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // 검색 결과에서 즐겨찾기 토글 (별 표시용)
   const handleToggleFavorite = (text: string) => {
     setFavorites((prev) => {
       const newSet = new Set(prev);
@@ -57,16 +65,27 @@ export default function SearchPage() {
     });
   };
 
-  const handleToggleMyClassFavorite = (name: string) => {
-    setMyClassFavorites((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(name)) {
-        newSet.delete(name);
-      } else {
-        newSet.add(name);
-      }
-      return newSet;
-    });
+  // 검색 결과를 내 강의에 추가
+  const handleAddToMyClass = (className: string) => {
+    if (!myClasses.includes(className)) {
+      setMyClasses((prev) => [...prev, className]);
+      console.log(`"${className}" 강의를 내 강의에 추가했습니다.`);
+    }
+  };
+
+  // 내 강의에서 제거
+  const handleRemoveFromMyClass = (className: string) => {
+    setMyClasses((prev) => prev.filter((c) => c !== className));
+    console.log(`"${className}" 강의를 내 강의에서 제거했습니다.`);
+  };
+
+  // 검색 결과 항목 클릭 시: 내 강의에 추가/제거 토글
+  const handleSearchResultClick = (className: string) => {
+    if (myClasses.includes(className)) {
+      handleRemoveFromMyClass(className);
+    } else {
+      handleAddToMyClass(className);
+    }
   };
 
   const handleClearSearch = () => {
@@ -121,20 +140,16 @@ export default function SearchPage() {
       </div>
 
       {/* 검색 결과 */}
-      <div className="flex-1 overflow-y-auto">
-        {searchResults
-          .filter((result) =>
-            result.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-          .map((result) => (
-            <SearchResultItem
-              key={result}
-              text={result}
-              favorite={favorites.has(result)}
-              onToggleFavorite={() => handleToggleFavorite(result)}
-              onClick={() => console.log('선택:', result)}
-            />
-          ))}
+      <div className="flex-1 overflow-y-auto pb-[300px]">
+        {searchResults.map((result) => (
+          <SearchResultItem
+            key={result}
+            text={result}
+            favorite={myClasses.includes(result)}
+            onToggleFavorite={() => handleSearchResultClick(result)}
+            onClick={() => handleSearchResultClick(result)}
+          />
+        ))}
       </div>
 
       {/* 하단 바텀시트 */}
@@ -144,9 +159,9 @@ export default function SearchPage() {
             <MyClassItem
               key={className}
               name={className}
-              favorite={myClassFavorites.has(className)}
-              onToggleFavorite={() => handleToggleMyClassFavorite(className)}
-              onClick={() => console.log('선택:', className)}
+              favorite={true}
+              onToggleFavorite={() => handleRemoveFromMyClass(className)}
+              onClick={() => handleRemoveFromMyClass(className)}
             />
           ))}
         </BottomSheet>
