@@ -1,8 +1,9 @@
 "use client";
 
+import { authAPI, handleApiError } from "@/api";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function FindPasswordPage() {
   const router = useRouter();
@@ -26,8 +27,17 @@ export default function FindPasswordPage() {
   const [isPasswordLengthValid, setIsPasswordLengthValid] = useState(false);
   const [isPasswordMatch, setIsPasswordMatch] = useState(false);
 
-  // Timer state
+  // Timer and verification sent state
+  const [timeLeft, setTimeLeft] = useState(299); // 4:59
   const [isVerificationSent, setIsVerificationSent] = useState(false);
+
+  // Timer effect
+  useEffect(() => {
+    if (isVerificationSent && timeLeft > 0 && !isVerified) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isVerificationSent, timeLeft, isVerified]);
 
   const validateEmail = (email: string) => {
     const isValid = /@mju\.ac\.kr$/.test(email);
@@ -66,26 +76,41 @@ export default function FindPasswordPage() {
     validatePasswordMatch(password, value);
   };
 
-  const handleSendCode = () => {
-    console.log("인증번호 전송/재전송");
-    setIsVerificationSent(true);
-    // TODO: 인증번호 전송 API 호출
+  const handleSendCode = async () => {
+    try {
+      const message = isVerificationSent
+        ? await authAPI.resendVerificationCode(email)
+        : await authAPI.sendVerificationCode(email);
+
+      setIsVerificationSent(true);
+      setTimeLeft(299);
+      alert(message);
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      alert(errorMessage);
+    }
   };
 
-  const handleVerify = () => {
-    console.log("인증 확인");
-    // TODO: 인증 확인 API 호출
-    setIsVerified(true);
+  const handleVerify = async () => {
+    try {
+      const message = await authAPI.verifyCode(email, verificationCode);
+      setIsVerified(true);
+      alert(message);
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      alert(errorMessage);
+    }
   };
 
-  const handleSubmit = () => {
-    console.log("비밀번호 재설정", {
-      email,
-      password,
-    });
-    // TODO: 비밀번호 재설정 API 호출
-    alert("비밀번호가 재설정되었습니다.");
-    router.push("/");
+  const handleSubmit = async () => {
+    try {
+      const message = await authAPI.resetPassword(email, password);
+      alert(message || "비밀번호가 재설정되었습니다.");
+      router.push("/login");
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      alert(errorMessage);
+    }
   };
 
   const isFormValid =
@@ -153,14 +178,43 @@ export default function FindPasswordPage() {
           <div className="flex flex-col gap-1">
             <div className="px-8 py-1">
               <div className="flex gap-1">
-                <input
-                  type="text"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  placeholder="인증번호"
-                  maxLength={6}
-                  className="flex-1 bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
-                />
+                <div className="flex-1 bg-white border border-[#c7cacf] rounded-lg px-4 py-3 h-[44px] flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    placeholder="인증번호"
+                    maxLength={6}
+                    className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
+                  />
+                  {!isVerified && isVerificationSent && (
+                    <span className="caption-m-regular text-[#f93838]">
+                      {Math.floor(timeLeft / 60)}:
+                      {String(timeLeft % 60).padStart(2, "0")}
+                    </span>
+                  )}
+                  {verificationCode && !isVerified && (
+                    <button
+                      onClick={() => setVerificationCode("")}
+                      className="w-[13.5px] h-[13.5px] flex items-center justify-center shrink-0"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                      >
+                        <circle cx="7" cy="7" r="6" fill="#A3A7AD" />
+                        <path
+                          d="M4.5 4.5L9.5 9.5M9.5 4.5L4.5 9.5"
+                          stroke="white"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
                 <button
                   onClick={handleVerify}
                   disabled={verificationCode === ""}
