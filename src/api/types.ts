@@ -35,3 +35,13 @@ export interface LectureResponseDto {
 export interface TakeRequestDto {
   lectureId: number;
 }
+
+/**
+ * 사용자 정보 응답 타입
+ */
+export interface UserInfoResponseDto {
+  mjuId: string;
+  name: string;
+  email: string;
+  major: string;
+}

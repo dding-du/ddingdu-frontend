@@ -1,12 +1,39 @@
 "use client";
 
-import { authAPI, handleApiError } from "@/api";
+import { authAPI, handleApiError, userAPI } from "@/api";
+import type { UserInfoResponseDto } from "@/api/types";
 import { PageHeader } from "@/components/common/PageHeader";
+import { majors } from "@/constans/major";
 import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function MyPage() {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState<UserInfoResponseDto | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 사용자 정보 조회
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const data = await userAPI.getMyInfo();
+        setUserInfo(data);
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        console.error("사용자 정보 조회 오류:", errorMessage);
+        // 401 에러인 경우 로그인 페이지로 리다이렉트
+        if (errorMessage.includes("401") || errorMessage.includes("인증")) {
+          tokenManager.clearTokens();
+          router.push("/login");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserInfo();
+  }, [router]);
 
   const handleClose = () => {
     router.back();
@@ -41,14 +68,31 @@ export default function MyPage() {
     router.push("/delete-account");
   };
 
-  // 사용자 정보 (실제로는 API에서 가져와야 함)
-  const userInfo = {
-    studentId: "60261121",
-    name: "홍길동",
-    email: "ddingdu@mju.ac.kr",
-    password: "●●●●●●●●●",
-    major: "데이터사이언스전공",
-  };
+  // 로딩 중일 때
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <PageHeader title="마이페이지" showClose onClose={handleClose} />
+        <div className="flex items-center justify-center h-[calc(100vh-60px)]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#87a7e8]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // 사용자 정보가 없을 때
+  if (!userInfo) {
+    return (
+      <div className="min-h-screen bg-white">
+        <PageHeader title="마이페이지" showClose onClose={handleClose} />
+        <div className="flex items-center justify-center h-[calc(100vh-60px)]">
+          <p className="body-l-regular text-[#74787e]">
+            사용자 정보를 불러올 수 없습니다.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -64,7 +108,7 @@ export default function MyPage() {
             <div className="flex items-center justify-between px-8 py-4">
               <span className="flex-1 body-l-regular text-[#101010]">학번</span>
               <span className="body-m-regular text-[#74787e]">
-                {userInfo.studentId}
+                {userInfo.mjuId}
               </span>
             </div>
 
@@ -97,9 +141,7 @@ export default function MyPage() {
                 비밀번호
               </span>
               <div className="flex items-center gap-4">
-                <span className="body-m-regular text-[#101010]">
-                  {userInfo.password}
-                </span>
+                <span className="body-m-regular text-[#101010]">●●●●●●●●●</span>
                 <svg
                   width="18"
                   height="18"
@@ -123,7 +165,7 @@ export default function MyPage() {
             <div className="flex items-center justify-between px-8 py-4">
               <span className="flex-1 body-l-regular text-[#101010]">전공</span>
               <span className="body-m-regular text-[#74787e]">
-                {userInfo.major}
+                {majors.find((major) => major.value === userInfo.major)?.label}
               </span>
             </div>
           </div>
