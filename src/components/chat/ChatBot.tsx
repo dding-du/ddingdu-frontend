@@ -39,7 +39,7 @@ export function UserMessage({ children, className = "" }: UserMessageProps) {
       className={`flex flex-col items-end justify-center px-5 py-2 ${className}`}
     >
       <div className="bg-[#87a7e8] max-w-[280px] min-w-[40px] px-4 py-3 rounded-tl-[20px] rounded-br-[20px] rounded-bl-[20px]">
-        <p className="body-l-regular text-white text-right">{children}</p>
+        <p className="body-l-regular text-white text-left">{children}</p>
       </div>
     </div>
   );
