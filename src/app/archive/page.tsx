@@ -1,16 +1,11 @@
 "use client";
 
 import { PageHeader } from "@/components/common/PageHeader";
-import {
-  BottomSheet,
-  MyClassItem,
-  SearchInput,
-  SearchResultItem,
-} from "@/components/search/Search";
+import { SearchInput, SearchResultItem } from "@/components/search/Search";
 import { useState } from "react";
 
 export default function SearchPage() {
-  const [searchQuery, setSearchQuery] = useState("인공지능");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // 내 강의 목록 상태 (동적으로 추가/제거 가능)
   const [myClasses, setMyClasses] = useState<string[]>([
@@ -24,9 +19,6 @@ export default function SearchPage() {
     "인공지능의세계",
     "환경과웰빙(KCU)",
   ]);
-
-  // 바텀시트 확장/축소 상태
-  const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
 
   // 검색 가능한 전체 강의 목록
   const allClasses = [
@@ -52,6 +44,9 @@ export default function SearchPage() {
   const searchResults = allClasses.filter((className) =>
     className.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // 화면에 표시할 리스트 (검색어가 없으면 내 강의, 있으면 검색 결과)
+  const displayList = searchQuery.trim() === "" ? myClasses : searchResults;
 
   // 검색 결과를 내 강의에 추가
   const handleAddToMyClass = (className: string) => {
@@ -100,9 +95,9 @@ export default function SearchPage() {
           />
         </div>
 
-        {/* 검색 결과 */}
-        <div className="flex-1 overflow-y-auto pb-[300px]">
-          {searchResults.map((result) => (
+        {/* 검색 결과 또는 내 강의 목록 */}
+        <div className="flex-1 overflow-y-auto pb-10">
+          {displayList.map((result) => (
             <SearchResultItem
               key={result}
               text={result}
@@ -111,25 +106,6 @@ export default function SearchPage() {
               onClick={() => handleSearchResultClick(result)}
             />
           ))}
-        </div>
-
-        {/* 하단 바텀시트 */}
-        <div className="fixed justify-center bottom-0 left-0 right-0 max-w-[520px] w-full mx-auto">
-          <BottomSheet
-            title="내 강의"
-            isExpanded={isBottomSheetExpanded}
-            onToggle={() => setIsBottomSheetExpanded(!isBottomSheetExpanded)}
-          >
-            {myClasses.map((className) => (
-              <MyClassItem
-                key={className}
-                name={className}
-                favorite={true}
-                onToggleFavorite={() => handleRemoveFromMyClass(className)}
-                onClick={() => handleRemoveFromMyClass(className)}
-              />
-            ))}
-          </BottomSheet>
         </div>
       </div>
     </div>
