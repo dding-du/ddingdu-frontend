@@ -97,15 +97,17 @@ export default function SearchPage() {
 
         {/* 검색 결과 또는 내 강의 목록 */}
         <div className="flex-1 overflow-y-auto pb-10">
-          {displayList.map((result) => (
-            <SearchResultItem
-              key={result}
-              text={result}
-              favorite={myClasses.includes(result)}
-              onToggleFavorite={() => handleSearchResultClick(result)}
-              onClick={() => handleSearchResultClick(result)}
-            />
-          ))}
+          {displayList
+            .sort((a, b) => a.localeCompare(b, "ko-KR"))
+            .map((result) => (
+              <SearchResultItem
+                key={result}
+                text={result}
+                favorite={myClasses.includes(result)}
+                onToggleFavorite={() => handleSearchResultClick(result)}
+                onClick={() => handleSearchResultClick(result)}
+              />
+            ))}
         </div>
       </div>
     </div>
