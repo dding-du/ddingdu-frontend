@@ -1,5 +1,10 @@
 import axiosInstance from "@/lib/axios";
-import type { ApiResponse, LectureResponseDto, TakeRequestDto } from "./types";
+import type {
+  ApiResponse,
+  LectureResponseDto,
+  TakeRequestDto,
+  TakeResponseDto,
+} from "./types";
 
 /**
  * 강의 API
@@ -14,6 +19,14 @@ export const courseAPI = {
   // 내 강의 목록 조회
   getMyCourses: async () => {
     const response = await axiosInstance.get<ApiResponse>("/courses/my");
+    return response.data;
+  },
+
+  // 내 강의 조회 (수강정보 조회)
+  getMyLectures: async (userId: number) => {
+    const response = await axiosInstance.get<TakeResponseDto[]>(
+      `/api/takes/my-lecture/${userId}`
+    );
     return response.data;
   },
 

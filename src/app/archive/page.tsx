@@ -1,7 +1,7 @@
 "use client";
 
-import { courseAPI, handleApiError } from "@/api";
-import type { LectureResponseDto } from "@/api/types";
+import { courseAPI, handleApiError, userAPI } from "@/api";
+import type { LectureResponseDto, TakeResponseDto } from "@/api/types";
 import { PageHeader } from "@/components/common/PageHeader";
 import { SearchInput, SearchResultItem } from "@/components/search/Search";
 import { useEffect, useState } from "react";
@@ -24,19 +24,14 @@ export default function SearchPage() {
   );
   const [searchResults, setSearchResults] = useState<LectureResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMyLectures, setIsLoadingMyLectures] = useState(true);
+  const [userId, setUserId] = useState<number | null>(null);
 
-  // 내 강의 목록 상태 (동적으로 추가/제거 가능)
-  const [myClasses, setMyClasses] = useState<string[]>([
-    "4차산업혁명을위한비판적사고",
-    "기독교와문화",
-    "기초프로그래밍2",
-    "문화리터러시와창의적스토리텔링",
-    "영어회화1",
-    "영어2",
-    "인공지능의세계",
-    "채플",
-    "환경과웰빙(KCU)",
-  ]);
+  // 내 강의 목록 상태 (API에서 가져온 데이터)
+  const [myLectures, setMyLectures] = useState<TakeResponseDto[]>([]);
+
+  // 내 강의 이름 목록 (기존 로직 호환성 유지)
+  const myClasses = myLectures.map((lecture) => lecture.lectureName);
 
   // 검색 가능한 전체 강의 목록 (교수 이름 포함)
   const allClasses: ClassInfo[] = [
@@ -92,6 +87,32 @@ export default function SearchPage() {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, searchType]);
 
+  // 사용자 정보 및 내 강의 목록 가져오기
+  useEffect(() => {
+    const fetchUserAndLectures = async () => {
+      try {
+        setIsLoadingMyLectures(true);
+
+        // 1. 사용자 정보 조회
+        const userInfo = await userAPI.getMyInfo();
+        setUserId(userInfo.userId);
+
+        // 2. 내 강의 목록 조회
+        const lectures = await courseAPI.getMyLectures(userInfo.userId);
+        setMyLectures(lectures);
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        console.error("내 강의 조회 오류:", errorMessage);
+        // 에러 발생 시 빈 배열로 설정
+        setMyLectures([]);
+      } finally {
+        setIsLoadingMyLectures(false);
+      }
+    };
+
+    fetchUserAndLectures();
+  }, []);
+
   // 화면에 표시할 리스트 (검색어가 없으면 내 강의, 있으면 검색 결과)
   const displayList: DisplayListItem[] =
     searchQuery.trim() === ""
@@ -112,19 +133,20 @@ export default function SearchPage() {
         await courseAPI.takeLecture(classInfo.lectureId);
         // API 성공 시에만 로컬 상태 업데이트
         if (!myClasses.includes(classInfo.name)) {
-          setMyClasses((prev) => [...prev, classInfo.name]);
+          // 새로운 강의 객체 생성하여 추가
+          const newLecture: TakeResponseDto = {
+            lectureId: classInfo.lectureId,
+            lectureName: classInfo.name,
+            professorName: classInfo.professor,
+            lectureCode: "", // 검색 결과에서는 강좌번호가 없을 수 있음
+          };
+          setMyLectures((prev) => [...prev, newLecture]);
           console.log(`"${classInfo.name}" 강의를 내 강의에 추가했습니다.`);
         }
       } catch (error) {
         const errorMessage = handleApiError(error);
         console.error("강의 추가 오류:", errorMessage);
         alert(`강의 추가에 실패했습니다: ${errorMessage}`);
-      }
-    } else {
-      // lectureId가 없는 경우 로컬에서만 추가
-      if (!myClasses.includes(classInfo.name)) {
-        setMyClasses((prev) => [...prev, classInfo.name]);
-        console.log(`"${classInfo.name}" 강의를 내 강의에 추가했습니다.`);
       }
     }
   };
@@ -136,17 +158,15 @@ export default function SearchPage() {
       try {
         await courseAPI.dropLecture(classInfo.lectureId);
         // API 성공 시에만 로컬 상태 업데이트
-        setMyClasses((prev) => prev.filter((c) => c !== classInfo.name));
+        setMyLectures((prev) =>
+          prev.filter((lecture) => lecture.lectureId !== classInfo.lectureId)
+        );
         console.log(`"${classInfo.name}" 강의를 내 강의에서 제거했습니다.`);
       } catch (error) {
         const errorMessage = handleApiError(error);
         console.error("강의 제거 오류:", errorMessage);
         alert(`강의 제거에 실패했습니다: ${errorMessage}`);
       }
-    } else {
-      // lectureId가 없는 경우 로컬에서만 제거
-      setMyClasses((prev) => prev.filter((c) => c !== classInfo.name));
-      console.log(`"${classInfo.name}" 강의를 내 강의에서 제거했습니다.`);
     }
   };
 
@@ -281,25 +301,41 @@ export default function SearchPage() {
 
         {/* 검색 결과 또는 내 강의 목록 */}
         <div className="flex-1 overflow-y-auto pb-10">
-          {displayList
-            .sort((a, b) => a.name.localeCompare(b.name, "ko-KR"))
-            .map((classInfo, index) => {
-              const uniqueKey =
-                "lectureId" in classInfo && classInfo.lectureId
-                  ? `lecture-${classInfo.lectureId}`
-                  : `local-${classInfo.name}-${classInfo.professor}-${index}`;
+          {isLoadingMyLectures && searchQuery.trim() === "" ? (
+            <div className="flex items-center justify-center py-10">
+              <p className="body-m-regular text-[#a3a7ad]">
+                강의 목록을 불러오는 중...
+              </p>
+            </div>
+          ) : displayList.length === 0 ? (
+            <div className="flex items-center justify-center py-10">
+              <p className="body-m-regular text-[#a3a7ad]">
+                {searchQuery.trim() === ""
+                  ? "등록된 강의가 없습니다."
+                  : "검색 결과가 없습니다."}
+              </p>
+            </div>
+          ) : (
+            displayList
+              .sort((a, b) => a.name.localeCompare(b.name, "ko-KR"))
+              .map((classInfo, index) => {
+                const uniqueKey =
+                  "lectureId" in classInfo && classInfo.lectureId
+                    ? `lecture-${classInfo.lectureId}`
+                    : `local-${classInfo.name}-${classInfo.professor}-${index}`;
 
-              return (
-                <SearchResultItem
-                  key={uniqueKey}
-                  text={classInfo.name}
-                  professor={classInfo.professor}
-                  favorite={myClasses.includes(classInfo.name)}
-                  onToggleFavorite={() => handleSearchResultClick(classInfo)}
-                  onClick={() => handleSearchResultClick(classInfo)}
-                />
-              );
-            })}
+                return (
+                  <SearchResultItem
+                    key={uniqueKey}
+                    text={classInfo.name}
+                    professor={classInfo.professor}
+                    favorite={myClasses.includes(classInfo.name)}
+                    onToggleFavorite={() => handleSearchResultClick(classInfo)}
+                    onClick={() => handleSearchResultClick(classInfo)}
+                  />
+                );
+              })
+          )}
         </div>
       </div>
     </div>

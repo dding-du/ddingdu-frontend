@@ -40,10 +40,24 @@ export interface TakeRequestDto {
  * 사용자 정보 응답 타입
  */
 export interface UserInfoResponseDto {
+  userId: number;
   mjuId: string;
   name: string;
   email: string;
   major: string;
+}
+
+/**
+ * 수강 응답 타입
+ */
+export interface TakeResponseDto {
+  lectureId: number;
+  lectureName: string;
+  professorName: string;
+  lectureCode: string;
+  department?: string;
+  credits?: number;
+  semester?: string;
 }
 
 /**
