@@ -27,6 +27,28 @@ export default function MyPage() {
     router.push("/delete-account");
   };
 
+  // 아이콘
+  const IconArrowDown = () => {
+    return (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="rotate-[-90deg]"
+      >
+        <path
+          d="M4.5 6.75L9 11.25L13.5 6.75"
+          stroke="#A3A7AD"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* 헤더 */}
@@ -105,22 +127,7 @@ export default function MyPage() {
               </span>
               <div className="flex items-center gap-4">
                 <span className="body-m-regular text-[#74787e]">●●●●●●●●●</span>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="rotate-[-90deg]"
-                >
-                  <path
-                    d="M4.5 6.75L9 11.25L13.5 6.75"
-                    stroke="#A3A7AD"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <IconArrowDown />
               </div>
             </button>
           </div>
