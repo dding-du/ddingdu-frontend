@@ -63,15 +63,7 @@ export function RecommendChip({
   return (
     <button
       onClick={onClick}
-      className={`
-        bg-white border border-[#dcdfe3]
-        px-[14px]  h-8
-        rounded-full
-        caption-l-regular text-[#74787e]
-        whitespace-nowrap
-        hover:bg-[#f0f2f5] transition-colors
-        ${className}
-      `}
+      className={`bg-white border border-[#dcdfe3] px-[14px] h-8 rounded-full caption-l-regular text-[#74787e] whitespace-nowrap hover:bg-[#f0f2f5] transition-colors ${className}`}
       type="button"
     >
       {text}
@@ -107,13 +99,7 @@ export function ChatInput({
 
   return (
     <div
-      className={`
-        bg-[#f0f2f5] border border-[#dcdfe3]
-        flex items-center gap-2
-        pl-4 pr-1 py-[10px] h-10
-        rounded-full
-        ${className}
-      `}
+      className={`bg-[#f0f2f5] border border-[#dcdfe3] flex items-center gap-2 pl-4 pr-1 py-[10px] h-10 rounded-full ${className}`}
     >
       <input
         type="text"
@@ -121,12 +107,7 @@ export function ChatInput({
         onChange={(e) => onChange?.(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder={placeholder}
-        className="
-          flex-1 bg-transparent
-          body-l-regular text-[#101010]
-          placeholder:text-[#b3b7bd]
-          outline-none
-        "
+        className="flex-1 bg-transparent body-l-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
       />
       <button
         onClick={onSend}

@@ -128,17 +128,7 @@ export default function MyPage() {
           {/* 로그아웃 버튼 */}
           <button
             onClick={handleLogout}
-            className="
-              flex-1
-              bg-[#87a7e8]
-              text-white
-              px-2 py-3
-              rounded-lg
-              body-m-medium
-              text-center
-              hover:bg-[#7599d9]
-              transition-colors
-            "
+            className="flex-1 bg-[#87a7e8] text-white px-2 py-3 rounded-lg body-m-medium text-center hover:bg-[#7599d9] transition-colors"
           >
             로그아웃
           </button>
@@ -146,17 +136,7 @@ export default function MyPage() {
           {/* 회원 탈퇴 버튼 */}
           <button
             onClick={handleDeleteAccount}
-            className="
-              flex-1
-              bg-[#c7cacf]
-              text-white
-              px-2 py-3
-              rounded-lg
-              body-m-medium
-              text-center
-              hover:bg-[#b3b7bd]
-              transition-colors
-            "
+            className="flex-1 bg-[#c7cacf] text-white px-2 py-3 rounded-lg body-m-medium text-center hover:bg-[#b3b7bd] transition-colors"
           >
             회원 탈퇴
           </button>
