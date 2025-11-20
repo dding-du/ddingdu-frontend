@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface StarButtonProps {
   active?: boolean;
@@ -10,23 +10,39 @@ interface StarButtonProps {
  * 별 버튼 컴포넌트
  * 즐겨찾기 토글용
  */
-export function StarButton({ active = false, onClick, className = '' }: StarButtonProps) {
+export function StarButton({
+  active = false,
+  onClick,
+  className = "",
+}: StarButtonProps) {
   return (
     <button
       onClick={onClick}
       className={`w-6 h-6 flex items-center justify-center shrink-0 ${className}`}
-      aria-label={active ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+      aria-label={active ? "즐겨찾기 해제" : "즐겨찾기 추가"}
       type="button"
     >
       {active ? (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
             fill="#CAD777"
           />
         </svg>
       ) : (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
             stroke="#B3B7BD"
@@ -55,11 +71,13 @@ export function SearchInput({
   value,
   onChange,
   onClear,
-  placeholder = '검색어를 입력하세요',
-  className = '',
+  placeholder = "검색어를 입력하세요",
+  className = "",
 }: SearchInputProps) {
   return (
-    <div className={`bg-[#f0f2f5] px-4 py-3 rounded-lg flex items-center gap-2 ${className}`}>
+    <div
+      className={`bg-[#f0f2f5] px-4 py-3 rounded-lg flex items-center gap-2 ${className}`}
+    >
       <input
         type="text"
         value={value}
@@ -74,7 +92,13 @@ export function SearchInput({
           aria-label="검색어 지우기"
           type="button"
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <circle cx="7" cy="7" r="6" fill="#A3A7AD" />
             <path
               d="M4.5 4.5L9.5 9.5M9.5 4.5L4.5 9.5"
@@ -91,6 +115,7 @@ export function SearchInput({
 
 interface SearchResultItemProps {
   text: string;
+  professor?: string;
   favorite?: boolean;
   onToggleFavorite?: () => void;
   onClick?: () => void;
@@ -102,21 +127,24 @@ interface SearchResultItemProps {
  */
 export function SearchResultItem({
   text,
+  professor,
   favorite = false,
   onToggleFavorite,
   onClick,
-  className = '',
+  className = "",
 }: SearchResultItemProps) {
   return (
-    <div className={className}>
-      <div
-        className="bg-white flex items-center gap-2 px-7 py-4 cursor-pointer hover:bg-[#f0f2f5]"
-        onClick={onClick}
-      >
-        <p className="flex-1 body-l-regular text-[#101010]">{text}</p>
-        <StarButton active={favorite} onClick={onToggleFavorite} />
+    <div
+      className={`bg-white flex items-start gap-2 px-8 py-3 cursor-pointer hover:bg-[#f0f2f5] ${className}`}
+      onClick={onClick}
+    >
+      <div className="flex-1 flex flex-col gap-1">
+        <p className="body-l-regular text-[#101010]">{text}</p>
+        {professor && (
+          <p className="body-s-regular text-[#74787e]">{professor}</p>
+        )}
       </div>
-      <div className="h-px bg-[#f0f2f5] mx-5" />
+      <StarButton active={favorite} onClick={onToggleFavorite} />
     </div>
   );
 }
@@ -137,7 +165,7 @@ export function MyClassItem({
   favorite = false,
   onToggleFavorite,
   onClick,
-  className = '',
+  className = "",
 }: MyClassItemProps) {
   return (
     <div
@@ -165,7 +193,7 @@ interface BottomSheetProps {
 export function BottomSheet({
   title,
   children,
-  className = '',
+  className = "",
   isExpanded = true,
   onToggle,
 }: BottomSheetProps) {
@@ -249,12 +277,14 @@ export function BottomSheet({
         rounded-t-[24px]
         shadow-[0px_-4px_12px_0px_rgba(0,0,0,0.06)]
         overflow-hidden
-        ${!isDragging ? 'transition-all duration-300 ease-in-out' : ''}
+        ${!isDragging ? "transition-all duration-300 ease-in-out" : ""}
         ${className}
       `}
       style={{
-        maxHeight: isExpanded ? '70vh' : '68px',
-        transform: isDragging ? `translateY(${Math.max(0, dragOffset)}px)` : 'translateY(0)',
+        maxHeight: isExpanded ? "70vh" : "68px",
+        transform: isDragging
+          ? `translateY(${Math.max(0, dragOffset)}px)`
+          : "translateY(0)",
       }}
     >
       {/* 핸들 바 - 드래그 가능 영역 */}
@@ -271,7 +301,7 @@ export function BottomSheet({
       >
         <div
           className={`w-10 h-1 bg-[#c7cacf] rounded transition-transform duration-200 ${
-            isExpanded ? '' : 'rotate-180'
+            isExpanded ? "" : "rotate-180"
           }`}
         />
       </div>
@@ -289,17 +319,17 @@ export function BottomSheet({
       {/* 구분선 */}
       <div
         className={`h-px bg-[#f0f2f5] mx-5 transition-opacity duration-300 ${
-          isExpanded ? 'opacity-100' : 'opacity-0'
+          isExpanded ? "opacity-100" : "opacity-0"
         }`}
       />
 
       {/* 내용 */}
       <div
         className={`overflow-y-auto transition-all duration-300 ${
-          isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         style={{
-          maxHeight: isExpanded ? 'calc(70vh - 68px)' : '0',
+          maxHeight: isExpanded ? "calc(70vh - 68px)" : "0",
         }}
       >
         {children}

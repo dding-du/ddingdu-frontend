@@ -4,49 +4,56 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { SearchInput, SearchResultItem } from "@/components/search/Search";
 import { useState } from "react";
 
+interface ClassInfo {
+  name: string;
+  professor: string;
+}
+
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // 내 강의 목록 상태 (동적으로 추가/제거 가능)
   const [myClasses, setMyClasses] = useState<string[]>([
-    "기초프로그래밍2",
-    "기독교와문화",
     "4차산업혁명을위한비판적사고",
-    "영어2",
-    "영어회화1",
-    "채플",
+    "기독교와문화",
+    "기초프로그래밍2",
     "문화리터러시와창의적스토리텔링",
+    "영어회화1",
+    "영어2",
     "인공지능의세계",
+    "채플",
     "환경과웰빙(KCU)",
   ]);
 
-  // 검색 가능한 전체 강의 목록
-  const allClasses = [
-    "인공지능",
-    "인공지능 세계",
-    "인공지능 윤리",
-    "기초프로그래밍2",
-    "기독교와문화",
-    "4차산업혁명을위한비판적사고",
-    "영어2",
-    "영어회화1",
-    "채플",
-    "문화리터러시와창의적스토리텔링",
-    "인공지능의세계",
-    "환경과웰빙(KCU)",
-    "데이터구조",
-    "알고리즘",
-    "웹프로그래밍",
-    "모바일프로그래밍",
+  // 검색 가능한 전체 강의 목록 (교수 이름 포함)
+  const allClasses: ClassInfo[] = [
+    { name: "4차산업혁명을위한비판적사고", professor: "권향숙" },
+    { name: "기독교와문화", professor: "김제민" },
+    { name: "기초프로그래밍2", professor: "이강선" },
+    { name: "문화리터러시와창의적스토리텔링", professor: "이영아" },
+    { name: "영어회화1", professor: "메이어호퍼" },
+    { name: "영어2", professor: "전미경" },
+    { name: "인공지능의세계", professor: "김제민" },
+    { name: "채플", professor: "교목실S" },
+    { name: "환경과웰빙(KCU)", professor: "김한수" },
+    { name: "인공지능", professor: "홍길동" },
+    { name: "인공지능 윤리", professor: "박영희" },
+    { name: "데이터구조", professor: "이철수" },
+    { name: "알고리즘", professor: "김영수" },
+    { name: "웹프로그래밍", professor: "박지성" },
+    { name: "모바일프로그래밍", professor: "손흥민" },
   ];
 
   // 검색어에 맞는 강의 필터링
-  const searchResults = allClasses.filter((className) =>
-    className.toLowerCase().includes(searchQuery.toLowerCase())
+  const searchResults = allClasses.filter((classInfo) =>
+    classInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // 화면에 표시할 리스트 (검색어가 없으면 내 강의, 있으면 검색 결과)
-  const displayList = searchQuery.trim() === "" ? myClasses : searchResults;
+  const displayList =
+    searchQuery.trim() === ""
+      ? allClasses.filter((c) => myClasses.includes(c.name))
+      : searchResults;
 
   // 검색 결과를 내 강의에 추가
   const handleAddToMyClass = (className: string) => {
@@ -98,14 +105,15 @@ export default function SearchPage() {
         {/* 검색 결과 또는 내 강의 목록 */}
         <div className="flex-1 overflow-y-auto pb-10">
           {displayList
-            .sort((a, b) => a.localeCompare(b, "ko-KR"))
-            .map((result) => (
+            .sort((a, b) => a.name.localeCompare(b.name, "ko-KR"))
+            .map((classInfo) => (
               <SearchResultItem
-                key={result}
-                text={result}
-                favorite={myClasses.includes(result)}
-                onToggleFavorite={() => handleSearchResultClick(result)}
-                onClick={() => handleSearchResultClick(result)}
+                key={classInfo.name}
+                text={classInfo.name}
+                professor={classInfo.professor}
+                favorite={myClasses.includes(classInfo.name)}
+                onToggleFavorite={() => handleSearchResultClick(classInfo.name)}
+                onClick={() => handleSearchResultClick(classInfo.name)}
               />
             ))}
         </div>
