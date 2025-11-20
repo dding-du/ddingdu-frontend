@@ -1,6 +1,6 @@
 "use client";
 
-import { authAPI, handleApiError } from "@/api/api";
+import { authAPI, handleApiError } from "@/api";
 import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
