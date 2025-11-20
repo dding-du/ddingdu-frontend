@@ -1,50 +1,53 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
 import {
-  SearchInput,
-  SearchResultItem,
   BottomSheet,
   MyClassItem,
-} from '@/components/Search';
+  SearchInput,
+  SearchResultItem,
+} from "@/components/Search";
+import { useState } from "react";
 
 export default function SearchPage() {
-  const [searchQuery, setSearchQuery] = useState('인공지능');
+  const [searchQuery, setSearchQuery] = useState("인공지능");
   const [favorites, setFavorites] = useState<Set<string>>(
-    new Set(['인공지능', '인공지능 윤리'])
+    new Set(["인공지능", "인공지능 윤리"])
   );
 
   // 내 강의 목록 상태 (동적으로 추가/제거 가능)
   const [myClasses, setMyClasses] = useState<string[]>([
-    '기초프로그래밍2',
-    '기독교와문화',
-    '4차산업혁명을위한비판적사고',
-    '영어2',
-    '영어회화1',
-    '채플',
-    '문화리터러시와창의적스토리텔링',
-    '인공지능의세계',
-    '환경과웰빙(KCU)',
+    "기초프로그래밍2",
+    "기독교와문화",
+    "4차산업혁명을위한비판적사고",
+    "영어2",
+    "영어회화1",
+    "채플",
+    "문화리터러시와창의적스토리텔링",
+    "인공지능의세계",
+    "환경과웰빙(KCU)",
   ]);
+
+  // 바텀시트 확장/축소 상태
+  const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
 
   // 검색 가능한 전체 강의 목록
   const allClasses = [
-    '인공지능',
-    '인공지능 세계',
-    '인공지능 윤리',
-    '기초프로그래밍2',
-    '기독교와문화',
-    '4차산업혁명을위한비판적사고',
-    '영어2',
-    '영어회화1',
-    '채플',
-    '문화리터러시와창의적스토리텔링',
-    '인공지능의세계',
-    '환경과웰빙(KCU)',
-    '데이터구조',
-    '알고리즘',
-    '웹프로그래밍',
-    '모바일프로그래밍',
+    "인공지능",
+    "인공지능 세계",
+    "인공지능 윤리",
+    "기초프로그래밍2",
+    "기독교와문화",
+    "4차산업혁명을위한비판적사고",
+    "영어2",
+    "영어회화1",
+    "채플",
+    "문화리터러시와창의적스토리텔링",
+    "인공지능의세계",
+    "환경과웰빙(KCU)",
+    "데이터구조",
+    "알고리즘",
+    "웹프로그래밍",
+    "모바일프로그래밍",
   ];
 
   // 검색어에 맞는 강의 필터링
@@ -89,7 +92,7 @@ export default function SearchPage() {
   };
 
   const handleClearSearch = () => {
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   const handleClose = () => {
@@ -102,7 +105,7 @@ export default function SearchPage() {
       <header className="bg-white flex items-center gap-2 px-5 pt-6 pb-4">
         <h1
           className="flex-1 text-[18px] font-medium leading-[23px] text-[#101010]"
-          style={{ fontFamily: 'var(--font-gmarket), sans-serif' }}
+          style={{ fontFamily: "var(--font-gmarket), sans-serif" }}
         >
           강의 보관함
         </h1>
@@ -154,7 +157,11 @@ export default function SearchPage() {
 
       {/* 하단 바텀시트 */}
       <div className="absolute bottom-0 left-0 right-0">
-        <BottomSheet title="내 강의">
+        <BottomSheet
+          title="내 강의"
+          isExpanded={isBottomSheetExpanded}
+          onToggle={() => setIsBottomSheetExpanded(!isBottomSheetExpanded)}
+        >
           {myClasses.map((className) => (
             <MyClassItem
               key={className}
