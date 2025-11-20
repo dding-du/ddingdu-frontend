@@ -1,5 +1,7 @@
 "use client";
 
+import { authAPI, handleApiError } from "@/lib/api";
+import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -37,7 +39,7 @@ export default function LoginPage() {
     setEmailError("");
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     let hasError = false;
 
     if (!email || !validateEmail(email)) {
@@ -51,9 +53,24 @@ export default function LoginPage() {
     }
 
     if (!hasError) {
-      // TODO: 로그인 API 호출
-      console.log("로그인:", { email, password, autoLogin });
-      router.push("/home");
+      try {
+        const tokenResponse = await authAPI.login(email, password);
+
+        // tokenManager를 통해 토큰 저장
+        tokenManager.setTokens(
+          tokenResponse.accessToken,
+          tokenResponse.refreshToken
+        );
+
+        // 자동 로그인 설정 저장
+        tokenManager.setAutoLogin(autoLogin);
+
+        // 홈으로 이동
+        router.push("/home");
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        setPasswordError(errorMessage);
+      }
     }
   };
 

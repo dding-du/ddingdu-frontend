@@ -1,6 +1,7 @@
 "use client";
 
 import { authAPI, handleApiError } from "@/lib/api";
+import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -163,9 +164,11 @@ export default function SignupPage() {
         verificationCode,
       });
 
-      // 토큰 저장
-      localStorage.setItem("accessToken", tokenResponse.accessToken);
-      localStorage.setItem("refreshToken", tokenResponse.refreshToken);
+      // tokenManager를 통해 토큰 저장
+      tokenManager.setTokens(
+        tokenResponse.accessToken,
+        tokenResponse.refreshToken
+      );
 
       alert("회원가입이 완료되었습니다.");
       router.push("/");

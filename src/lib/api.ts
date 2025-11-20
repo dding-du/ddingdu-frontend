@@ -24,10 +24,13 @@ export interface TokenResponseDto {
 export const authAPI = {
   // 로그인
   login: async (email: string, password: string) => {
-    const response = await axiosInstance.post<ApiResponse>("/auth/login", {
-      email,
-      password,
-    });
+    const response = await axiosInstance.post<TokenResponseDto>(
+      "/api/auth/login",
+      {
+        email,
+        password,
+      }
+    );
     return response.data;
   },
 
@@ -49,10 +52,9 @@ export const authAPI = {
 
   // 이메일 인증번호 전송
   sendVerificationCode: async (email: string) => {
-    const response = await axiosInstance.post<string>(
-      "/api/auth/email/send",
-      { email }
-    );
+    const response = await axiosInstance.post<string>("/api/auth/email/send", {
+      email,
+    });
     return response.data;
   },
 
@@ -67,10 +69,13 @@ export const authAPI = {
 
   // 인증번호 확인
   verifyCode: async (email: string, code: string) => {
-    const response = await axiosInstance.post<string>("/api/auth/email/verify", {
-      email,
-      code,
-    });
+    const response = await axiosInstance.post<string>(
+      "/api/auth/email/verify",
+      {
+        email,
+        code,
+      }
+    );
     return response.data;
   },
 
@@ -104,11 +109,11 @@ export const userAPI = {
   },
 
   // 사용자 정보 수정
-  updateProfile: async (data: {
-    name?: string;
-    major?: string;
-  }) => {
-    const response = await axiosInstance.put<ApiResponse>("/user/profile", data);
+  updateProfile: async (data: { name?: string; major?: string }) => {
+    const response = await axiosInstance.put<ApiResponse>(
+      "/user/profile",
+      data
+    );
     return response.data;
   },
 
