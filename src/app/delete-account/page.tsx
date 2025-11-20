@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function DeleteAccountPage() {
   const router = useRouter();
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleBack = () => {
     router.back();
@@ -14,24 +14,24 @@ export default function DeleteAccountPage() {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    if (error) setError(''); // 입력 시 에러 메시지 제거
+    if (error) setError(""); // 입력 시 에러 메시지 제거
   };
 
   const handleSubmit = () => {
     if (!password) {
-      setError('비밀번호를 입력해 주세요');
+      setError("비밀번호를 입력해 주세요");
       return;
     }
 
     // TODO: 비밀번호 확인 API 호출
-    console.log('비밀번호 확인:', password);
+    console.log("비밀번호 확인:", password);
 
     // 비밀번호 확인 성공 시 최종 확인 페이지로 이동
-    router.push('/delete-account-confirm');
+    router.push("/delete-account-confirm");
   };
 
   const handleFindPassword = () => {
-    console.log('비밀번호 찾기');
+    console.log("비밀번호 찾기");
     // TODO: 비밀번호 찾기 페이지로 이동
   };
 
@@ -65,7 +65,7 @@ export default function DeleteAccountPage() {
         </button>
         <h1
           className="flex-1 text-[18px] font-medium leading-[23px] text-[#101010]"
-          style={{ fontFamily: 'var(--font-gmarket), sans-serif' }}
+          style={{ fontFamily: "var(--font-gmarket), sans-serif" }}
         >
           비밀번호 확인
         </h1>
@@ -92,7 +92,7 @@ export default function DeleteAccountPage() {
               className={`
                 w-full
                 bg-white
-                border ${error ? 'border-[#f93838]' : 'border-[#c7cacf]'}
+                border ${error ? "border-[#f93838]" : "border-[#c7cacf]"}
                 rounded-lg
                 px-4 py-3
                 body-m-regular
@@ -120,14 +120,14 @@ export default function DeleteAccountPage() {
                 disabled={!isValid}
                 className={`
                   w-full
-                  ${isValid ? 'bg-[#87a7e8]' : 'bg-[#c7cacf]'}
+                  ${isValid ? "bg-[#87a7e8]" : "bg-[#c7cacf]"}
                   text-white
                   px-2 py-3
                   rounded-lg
                   body-m-medium
                   text-center
                   transition-colors
-                  ${isValid ? 'hover:bg-[#7599d9]' : 'cursor-not-allowed'}
+                  ${isValid ? "hover:bg-[#7599d9]" : "cursor-not-allowed"}
                 `}
               >
                 다음
