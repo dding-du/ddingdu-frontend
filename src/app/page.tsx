@@ -32,6 +32,12 @@ export default function Home() {
   ]);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
+  const questions = [
+    "발표 없는 수업 있어?",
+    "우리과에 괜찮은 강의평을 가진 수업 있어?",
+    "이강선 교수님 강의 추천해줘.",
+  ];
+
   // 인증 체크
   useEffect(() => {
     const accessToken = tokenManager.getAccessToken();
@@ -229,22 +235,13 @@ export default function Home() {
           {/* 추천 질문 칩들 */}
           <div className="px-5 py-0">
             <div className="flex gap-2 overflow-x-auto">
-              <RecommendChip
-                text="N/P 교양 강의 궁금해!"
-                onClick={() => handleChipClick("N/P 교양 강의 궁금해!")}
-              />
-              <RecommendChip
-                text="팀프로젝트 없는 교양 과목 알려줘"
-                onClick={() =>
-                  handleChipClick("팀프로젝트 없는 교양 과목 알려줘")
-                }
-              />
-              <RecommendChip
-                text="성적 F 처리 기준이 뭔지 알려줘!"
-                onClick={() =>
-                  handleChipClick("성적 F 처리 기준이 뭔지 알려줘!")
-                }
-              />
+              {questions.map((question, index) => (
+                <RecommendChip
+                  key={index}
+                  text={question}
+                  onClick={() => handleChipClick(question)}
+                />
+              ))}
             </div>
           </div>
 

@@ -3,7 +3,7 @@
 import { authAPI, handleApiError } from "@/api";
 import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,6 +13,17 @@ export default function LoginPage() {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [autoLogin, setAutoLogin] = useState(false);
+
+  // 자동 로그인 체크
+  useEffect(() => {
+    const isAutoLoginEnabled = tokenManager.isAutoLoginEnabled();
+    const accessToken = tokenManager.getAccessToken();
+
+    // 자동 로그인이 활성화되어 있고 토큰이 있으면 홈으로 이동
+    if (isAutoLoginEnabled && accessToken) {
+      router.replace("/");
+    }
+  }, [router]);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@mju\.ac\.kr$/;
