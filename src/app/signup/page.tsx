@@ -187,17 +187,15 @@ export default function SignupPage() {
                 >
                   숫자 8자리
                 </span>
-                {isStudentIdValid && (
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                      d="M3 7L6 10L11 4"
-                      stroke="#3e6fd0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M3 7L6 10L11 4"
+                    stroke={isStudentIdValid ? "#3e6fd0" : "#b3b7bd"}
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             </div>
 
@@ -219,17 +217,15 @@ export default function SignupPage() {
                 >
                   한/영문 20자리 이하
                 </span>
-                {isNameValid && (
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                      d="M3 7L6 10L11 4"
-                      stroke="#3e6fd0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M3 7L6 10L11 4"
+                    stroke={isNameValid ? "#3e6fd0" : "#b3b7bd"}
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             </div>
 
@@ -282,17 +278,15 @@ export default function SignupPage() {
                   >
                     명지대학교 이메일 형식
                   </span>
-                  {isEmailValid && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7L6 10L11 4"
-                        stroke="#3e6fd0"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M3 7L6 10L11 4"
+                      stroke={isEmailValid ? "#3e6fd0" : "#b3b7bd"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
                 <div className="flex items-center gap-1">
                   <span
@@ -302,17 +296,15 @@ export default function SignupPage() {
                   >
                     사용 가능 이메일
                   </span>
-                  {isEmailAvailable && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7L6 10L11 4"
-                        stroke="#3e6fd0"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M3 7L6 10L11 4"
+                      stroke={isEmailAvailable ? "#3e6fd0" : "#b3b7bd"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -370,17 +362,15 @@ export default function SignupPage() {
                 >
                   인증 완료
                 </span>
-                {isVerified && (
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                      d="M3 7L6 10L11 4"
-                      stroke="#3e6fd0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M3 7L6 10L11 4"
+                    stroke={isVerified ? "#3e6fd0" : "#b3b7bd"}
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             </div>
 
@@ -443,17 +433,15 @@ export default function SignupPage() {
                   >
                     영문 포함
                   </span>
-                  {hasEnglish && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7L6 10L11 4"
-                        stroke="#3e6fd0"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M3 7L6 10L11 4"
+                      stroke={hasEnglish ? "#3e6fd0" : "#b3b7bd"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
                 <div className="flex items-center gap-1">
                   <span
@@ -463,17 +451,15 @@ export default function SignupPage() {
                   >
                     숫자 포함
                   </span>
-                  {hasNumber && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7L6 10L11 4"
-                        stroke="#3e6fd0"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M3 7L6 10L11 4"
+                      stroke={hasNumber ? "#3e6fd0" : "#b3b7bd"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
                 <div className="flex items-center gap-1">
                   <span
@@ -483,17 +469,15 @@ export default function SignupPage() {
                   >
                     특수문자 포함
                   </span>
-                  {hasSpecialChar && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7L6 10L11 4"
-                        stroke="#3e6fd0"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M3 7L6 10L11 4"
+                      stroke={hasSpecialChar ? "#3e6fd0" : "#b3b7bd"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
                 <div className="flex items-center gap-1">
                   <span
@@ -505,17 +489,15 @@ export default function SignupPage() {
                   >
                     8~20자 이내
                   </span>
-                  {isPasswordLengthValid && (
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7L6 10L11 4"
-                        stroke="#3e6fd0"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M3 7L6 10L11 4"
+                      stroke={isPasswordLengthValid ? "#3e6fd0" : "#b3b7bd"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -578,17 +560,15 @@ export default function SignupPage() {
                 >
                   비밀번호 일치
                 </span>
-                {isPasswordMatch && (
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                      d="M3 7L6 10L11 4"
-                      stroke="#3e6fd0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M3 7L6 10L11 4"
+                    stroke={isPasswordMatch ? "#3e6fd0" : "#b3b7bd"}
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             </div>
 

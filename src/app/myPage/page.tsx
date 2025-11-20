@@ -93,7 +93,7 @@ export default function MyPage() {
               className="flex items-center justify-between px-8 py-4 hover:bg-[#f0f2f5] transition-colors"
             >
               <span className="flex-1 flex flex-start body-l-regular text-[#101010]">
-                이베일
+                이메일
               </span>
               <div className="flex items-center gap-4">
                 <span className="body-m-regular text-[#74787e]">admin</span>
