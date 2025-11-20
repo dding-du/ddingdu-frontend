@@ -23,10 +23,8 @@ export default function MyPage() {
   };
 
   const handleDeleteAccount = () => {
-    if (confirm("정말 회원 탈퇴하시겠습니까?")) {
-      console.log("회원 탈퇴");
-      // 회원 탈퇴 로직 구현
-    }
+    // 비밀번호 확인 페이지로 이동
+    router.push("/delete-account");
   };
 
   return (
