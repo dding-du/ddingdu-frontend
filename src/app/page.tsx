@@ -46,8 +46,18 @@ export default function Home() {
   }, [router]);
 
   // API 응답에서 "data:" 접두사 제거하는 함수
-  const cleanResponseContent = (content: string): string => {
-    return content
+  const cleanResponseContent = (content: any): string => {
+    // content가 객체인 경우 message 추출
+    let messageStr: string;
+    if (typeof content === "string") {
+      messageStr = content;
+    } else if (content?.data?.data?.message) {
+      messageStr = content.data.data.message;
+    } else {
+      messageStr = "";
+    }
+
+    return messageStr
       .split("\n")
       .map((line) => line.replace(/^data:/, "").trim())
       .join("\n");
@@ -70,9 +80,35 @@ export default function Home() {
       // API 호출
       const response = await chatAPI.sendMessage(text);
 
-      console.log(response);
+      // 여러 가능한 경로로 메시지 추출 시도
+      let rawMessage: string;
 
-      const rawMessage = response || "응답을 받지 못했습니다.";
+      if (typeof response === "string") {
+        // 이미 string인 경우
+        rawMessage = response;
+      } else if (response?.data) {
+        // Axios response 객체 - data 속성에 실제 메시지가 있음
+        rawMessage =
+          typeof response.data === "string"
+            ? response.data
+            : JSON.stringify(response.data);
+      } else if (response?.data?.data?.message) {
+        // ApiResponse<ChatResponseDto> 구조
+        rawMessage = response.data.data.message;
+      } else if (response?.data?.message) {
+        // 중첩이 한 단계 덜한 경우
+        rawMessage = response.data.message;
+      } else if (response?.message) {
+        // 직접 message 속성이 있는 경우
+        rawMessage = response.message;
+      } else {
+        // 그 외의 경우 JSON으로 변환 시도
+        rawMessage =
+          typeof response === "object"
+            ? JSON.stringify(response)
+            : "응답을 받지 못했습니다.";
+      }
+
       const cleanedContent = cleanResponseContent(rawMessage);
 
       // 봇 응답 추가
