@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white  flex flex-col">
       {/* 헤더 */}
-      <Header serviceName="MyPlace" />
+      <Header />
 
       {/* Main content wrapper with max-width and centered */}
       <div className="max-w-[520px] mx-auto w-full flex-1 flex flex-col pt-[84px]">

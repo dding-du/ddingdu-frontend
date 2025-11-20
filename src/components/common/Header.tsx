@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 
 interface HeaderProps {
-  serviceName?: string;
   className?: string;
 }
 
@@ -17,10 +16,7 @@ interface HeaderProps {
  * <Header serviceName="서비스명" onProfileClick={() => {}} onArchiveClick={() => {}} />
  * ```
  */
-export function Header({
-  serviceName = "((서비스명))",
-  className = "",
-}: HeaderProps) {
+export function Header({ className = "" }: HeaderProps) {
   const router = useRouter();
 
   const onProfileClick = () => {
@@ -55,12 +51,7 @@ export function Header({
       </button>
 
       {/* 중앙: 서비스명 */}
-      <h1
-        className="font-[var(--font-gmarket)] font-medium text-[18px] leading-[23px] text-center text-[#101010] shrink-0"
-        style={{ fontFamily: "var(--font-gmarket), sans-serif" }}
-      >
-        {serviceName}
-      </h1>
+      <img src="/headerTitle.svg" alt="Logo" className="w-24 h-24" />
 
       {/* 오른쪽: 보관함 아이콘 */}
       <button
