@@ -595,7 +595,7 @@ export default function SignupPage() {
                 >
                   <path
                     d="M3 5L7 9L11 5"
-                    stroke="#44474C"
+                    stroke={major === "" ? "#c7cacf" : "#44474C"}
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
