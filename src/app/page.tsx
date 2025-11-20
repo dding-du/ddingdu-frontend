@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -83,12 +83,7 @@ export default function LoginPage() {
         <div className="w-full flex flex-col gap-6 items-center">
           {/* 봇 캐릭터 */}
           <div className="flex items-center justify-center gap-1">
-            <img
-              src="/chat-bubble-left.svg"
-              alt="chat bubble"
-              className="w-[50px] h-[51px]"
-            />
-            <img src="/bot.svg" alt="bot" className="w-[76px] h-[54px]" />
+            <img src="logo.svg" alt="logo" />
           </div>
 
           <div className="w-full flex flex-col gap-3">
@@ -157,7 +152,9 @@ export default function LoginPage() {
                   <button
                     onClick={() => setShowPassword(!showPassword)}
                     className="w-[18px] h-[18px] flex items-center justify-center shrink-0"
-                    aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                    aria-label={
+                      showPassword ? "비밀번호 숨기기" : "비밀번호 보기"
+                    }
                     type="button"
                   >
                     {showPassword ? (
@@ -192,17 +189,17 @@ export default function LoginPage() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M7.5 7.5L10.5 10.5M10.5 7.5L7.5 10.5"
-                          stroke="#B3B7BD"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                        <path
                           d="M2.25 9C2.25 9 4.875 3.75 9 3.75C13.125 3.75 15.75 9 15.75 9C15.75 9 13.125 14.25 9 14.25C4.875 14.25 2.25 9 2.25 9Z"
                           stroke="#B3B7BD"
                           strokeWidth="1.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                        />
+                        <path
+                          d="M3 15L15 3"
+                          stroke="#B3B7BD"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
                         />
                       </svg>
                     )}
@@ -277,7 +274,9 @@ export default function LoginPage() {
                     </svg>
                   )}
                 </div>
-                <span className="body-m-regular text-[#101010]">자동 로그인</span>
+                <span className="body-m-regular text-[#101010]">
+                  자동 로그인
+                </span>
               </button>
             </div>
 
