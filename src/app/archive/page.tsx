@@ -143,7 +143,7 @@ export default function SearchPage() {
         await courseAPI.dropLecture(classInfo.id, userId);
         // API 성공 시에만 로컬 상태 업데이트
         setMyLectures((prev) =>
-          prev.filter((lecture) => lecture.lectureId !== classInfo.id)
+          prev.filter((lecture) => lecture.id !== classInfo.id)
         );
         console.log(`"${classInfo.name}" 강의를 내 강의에서 제거했습니다.`);
       } catch (error) {
@@ -303,10 +303,7 @@ export default function SearchPage() {
             displayList
               .sort((a, b) => a.name.localeCompare(b.name, "ko-KR"))
               .map((classInfo, index) => {
-                const uniqueKey =
-                  "lectureId" in classInfo && classInfo.lectureId
-                    ? `lecture-${classInfo.lectureId}`
-                    : `local-${classInfo.name}-${classInfo.professor}-${index}`;
+                const uniqueKey = `lecture-${classInfo.id}`;
 
                 return (
                   <SearchResultItem
@@ -315,7 +312,6 @@ export default function SearchPage() {
                     professor={classInfo.professor}
                     favorite={myClasses.includes(classInfo.name)}
                     onToggleFavorite={() => handleSearchResultClick(classInfo)}
-                    onClick={() => handleSearchResultClick(classInfo)}
                   />
                 );
               })
