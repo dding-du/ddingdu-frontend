@@ -58,8 +58,7 @@ export default function LoginPage() {
   };
 
   const handleFindPassword = () => {
-    console.log("비밀번호 찾기");
-    // TODO: 비밀번호 찾기 페이지로 이동
+    router.push("/find-password");
   };
 
   const handleSignup = () => {
