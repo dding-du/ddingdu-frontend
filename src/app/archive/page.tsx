@@ -48,9 +48,16 @@ export default function SearchPage() {
   ];
 
   // 검색어에 맞는 강의 필터링
-  const searchResults = allClasses.filter((classInfo) =>
-    classInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const searchResults = allClasses.filter((classInfo) => {
+    const query = searchQuery.toLowerCase();
+    if (searchType === "name") {
+      return classInfo.name.toLowerCase().includes(query);
+    } else if (searchType === "professor") {
+      return classInfo.professor.toLowerCase().includes(query);
+    }
+    // searchType === "code" - 강좌번호는 현재 데이터에 없으므로 빈 결과
+    return false;
+  });
 
   // 화면에 표시할 리스트 (검색어가 없으면 내 강의, 있으면 검색 결과)
   const displayList =
@@ -103,6 +110,102 @@ export default function SearchPage() {
             onClear={handleClearSearch}
             placeholder="검색어를 입력하세요"
           />
+        </div>
+
+        {/* 라디오 버튼 - 검색 타입 선택 */}
+        <div className="flex gap-4 items-center px-8 py-2">
+          <button
+            onClick={() => setSearchType("name")}
+            className="flex items-center gap-1 cursor-pointer"
+          >
+            <div className="w-[18px] h-[18px] flex items-center justify-center">
+              {searchType === "name" ? (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle
+                    cx="9"
+                    cy="9"
+                    r="7.5"
+                    stroke="#87a7e8"
+                    strokeWidth="1.5"
+                  />
+                  <circle cx="9" cy="9" r="4.5" fill="#87a7e8" />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle
+                    cx="9"
+                    cy="9"
+                    r="7.5"
+                    stroke="#a3a7ad"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              )}
+            </div>
+            <span className="body-m-regular text-[#101010]">강의명</span>
+          </button>
+
+          <button
+            onClick={() => setSearchType("professor")}
+            className="flex items-center gap-1 cursor-pointer"
+          >
+            <div className="w-[18px] h-[18px] flex items-center justify-center">
+              {searchType === "professor" ? (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle
+                    cx="9"
+                    cy="9"
+                    r="7.5"
+                    stroke="#87a7e8"
+                    strokeWidth="1.5"
+                  />
+                  <circle cx="9" cy="9" r="4.5" fill="#87a7e8" />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle
+                    cx="9"
+                    cy="9"
+                    r="7.5"
+                    stroke="#a3a7ad"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              )}
+            </div>
+            <span className="body-m-regular text-[#101010]">교수명</span>
+          </button>
+
+          <button
+            onClick={() => setSearchType("code")}
+            className="flex items-center gap-1 cursor-pointer"
+          >
+            <div className="w-[18px] h-[18px] flex items-center justify-center">
+              {searchType === "code" ? (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle
+                    cx="9"
+                    cy="9"
+                    r="7.5"
+                    stroke="#87a7e8"
+                    strokeWidth="1.5"
+                  />
+                  <circle cx="9" cy="9" r="4.5" fill="#87a7e8" />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle
+                    cx="9"
+                    cy="9"
+                    r="7.5"
+                    stroke="#a3a7ad"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              )}
+            </div>
+            <span className="body-m-regular text-[#101010]">강좌번호</span>
+          </button>
         </div>
 
         {/* 검색 결과 또는 내 강의 목록 */}
