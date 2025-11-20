@@ -2,9 +2,9 @@
 
 import { PageHeader } from "@/components/common/PageHeader";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
-export default function DeleteAccountPage() {
+function DeleteAccountContent() {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -119,5 +119,13 @@ export default function DeleteAccountPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DeleteAccountPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DeleteAccountContent />
+    </Suspense>
   );
 }

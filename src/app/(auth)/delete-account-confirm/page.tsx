@@ -1,6 +1,8 @@
 "use client";
 
+import { authAPI, handleApiError } from "@/api";
 import { PageHeader } from "@/components/common/PageHeader";
+import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -12,16 +14,24 @@ export default function DeleteAccountConfirmPage() {
     setIsChecked(!isChecked);
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (!isChecked) return;
 
     if (
       confirm("정말로 회원 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")
     ) {
-      console.log("회원 탈퇴 실행");
-      // TODO: 회원 탈퇴 API 호출
-      alert("회원 탈퇴가 완료되었습니다.");
-      router.push("/login");
+      try {
+        const message = await authAPI.deleteAccount();
+
+        // 토큰 및 자동 로그인 정보 삭제
+        tokenManager.clearTokens();
+
+        alert(message || "회원 탈퇴가 완료되었습니다.");
+        router.push("/login");
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        alert(errorMessage);
+      }
     }
   };
 

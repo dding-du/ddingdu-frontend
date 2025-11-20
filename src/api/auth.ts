@@ -96,6 +96,12 @@ export const authAPI = {
     return response.data;
   },
 
+  // 회원 탈퇴
+  deleteAccount: async () => {
+    const response = await axiosInstance.delete<string>("/api/auth/account");
+    return response.data;
+  },
+
   // 리프래쉬
   refresh: async () => {
     const refreshToken = tokenManager.getRefreshToken();
