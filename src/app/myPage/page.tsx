@@ -71,11 +71,11 @@ export default function MyPage() {
               className="flex items-center justify-between px-8 py-4 hover:bg-[#f0f2f5] transition-colors"
             >
               <span className="flex-1 flex flex-start body-l-regular text-[#101010]">
-                아이디
+                이베일
               </span>
               <div className="flex items-center gap-4">
                 <span className="body-m-regular text-[#74787e]">admin</span>
-                <svg
+                {/* <svg
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -90,7 +90,8 @@ export default function MyPage() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                </svg>
+                </svg> */}
+                <div className="w-[18px]" />
               </div>
             </button>
 
