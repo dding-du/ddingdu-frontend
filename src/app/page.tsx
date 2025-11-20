@@ -31,7 +31,7 @@ export default function Home() {
       {/* Main content wrapper with max-width and centered */}
       <div className="max-w-[520px] mx-auto w-full flex-1 flex flex-col pt-[84px]">
         {/* 채팅 영역 */}
-        <main className="flex-1 px-5 overflow-y-auto">
+        <main className="flex-1 px-5 pb-32 overflow-y-auto">
           <div className="flex flex-col gap-1">
             {/* 봇 초기 메시지 */}
             <img src="/bot.svg" alt="botImage" className="w-[76px] h-[54px]" />
@@ -66,7 +66,7 @@ export default function Home() {
         </main>
 
         {/* 하단 고정 영역 */}
-        <div className="bg-white flex flex-col gap-1 pb-8">
+        <div className="bg-white fixed bottom-0 pt-3 flex flex-col gap-1 pb-8">
           {/* 추천 질문 칩들 */}
           <div className="px-5 py-0">
             <div className="flex gap-2 overflow-x-auto">
