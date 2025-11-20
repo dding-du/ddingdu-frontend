@@ -25,12 +25,39 @@ export default function Home() {
   const [userId, setUserId] = useState(0);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [hasPlayedOpening, setHasPlayedOpening] = useState(false);
 
   const questions = [
     "발표 없는 수업 있어?",
     "우리과에 괜찮은 강의평을 가진 수업 있어?",
     "팀플 없는 강의 알려줘.",
   ];
+
+  // 오프닝 음성 재생 함수
+  const playOpeningAudio = () => {
+    if (!hasPlayedOpening) {
+      const audio = new Audio("/opening.wav");
+      audio.play().catch((error) => {
+        console.log("오디오 재생 실패:", error);
+      });
+      setHasPlayedOpening(true);
+    }
+  };
+
+  // 페이지 클릭 시 오디오 재생
+  useEffect(() => {
+    const handleFirstClick = () => {
+      playOpeningAudio();
+      // 한 번만 실행되도록 이벤트 리스너 제거
+      document.removeEventListener("click", handleFirstClick);
+    };
+
+    document.addEventListener("click", handleFirstClick);
+
+    return () => {
+      document.removeEventListener("click", handleFirstClick);
+    };
+  }, [hasPlayedOpening]);
 
   // 유저 데이터 가져오기
   useEffect(() => {
@@ -44,7 +71,7 @@ export default function Home() {
         setMessages([
           {
             type: "bot",
-            content: `안녕하세요😋\n명지대학교 강의정보 챗봇 띵듀로이드에요!\n\n${userInfo.name}님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!\n얼마든지 물어보세요~`,
+            content: `안녕하세요😋\n명지대학교 강의정보 챗봇 띵듀에요!\n\n${userInfo.name}님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!\n얼마든지 물어보세요~`,
             timestamp: Date.now(),
           },
         ]);
