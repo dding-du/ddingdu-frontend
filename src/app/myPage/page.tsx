@@ -1,6 +1,8 @@
 "use client";
 
 import { PageHeader } from "@/components/common/PageHeader";
+import { authAPI, handleApiError } from "@/lib/api";
+import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 
 export default function MyPage() {
@@ -15,10 +17,24 @@ export default function MyPage() {
     // TODO: 비밀번호 변경 페이지로 이동
   };
 
-  const handleLogout = () => {
-    console.log("로그아웃");
-    router.push("/");
-    // TODO: 로그아웃 API 호출
+  const handleLogout = async () => {
+    try {
+      // 로그아웃 API 호출
+      await authAPI.logout();
+
+      // 토큰 및 자동 로그인 정보 삭제
+      tokenManager.clearTokens();
+
+      // 로그인 페이지로 이동
+      router.push("/");
+    } catch (error) {
+      // 에러가 발생해도 로컬 토큰은 삭제하고 로그인 페이지로 이동
+      const errorMessage = handleApiError(error);
+      console.error("로그아웃 오류:", errorMessage);
+
+      tokenManager.clearTokens();
+      router.push("/");
+    }
   };
 
   const handleDeleteAccount = () => {

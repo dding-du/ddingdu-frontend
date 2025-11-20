@@ -93,7 +93,7 @@ export const authAPI = {
 
   // 로그아웃
   logout: async () => {
-    const response = await axiosInstance.post<ApiResponse>("/auth/logout");
+    const response = await axiosInstance.post<string>("/api/auth/logout");
     return response.data;
   },
 };
