@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 import { authAPI, handleApiError } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const majors = [
-  "응용소프트웨어전공",
-  "데이터사이언스전공",
-  "인공지능전공",
-  "디지털콘텐츠디자인학과",
+  { label: "응용소프트웨어전공", value: "APPLIED_SOFTWARE" },
+  { label: "데이터사이언스전공", value: "DATA_SCIENCE" },
+  { label: "인공지능전공", value: "AI" },
+  { label: "디지털콘텐츠디자인학과", value: "DIGITAL_CONTENT_DESIGN" },
 ];
 
 export default function SignupPage() {
@@ -149,17 +149,30 @@ export default function SignupPage() {
     }
   };
 
-  const handleSignup = () => {
-    console.log("회원가입", {
-      studentId,
-      name,
-      email,
-      password,
-      major,
-    });
-    // TODO: 회원가입 API 호출
-    alert("회원가입이 완료되었습니다.");
-    router.push("/");
+  const handleSignup = async () => {
+    try {
+      // 전공 label을 value로 변환
+      const majorValue = majors.find((m) => m.label === major)?.value || "";
+
+      const tokenResponse = await authAPI.signup({
+        mjuId: studentId,
+        name,
+        email,
+        password,
+        major: majorValue,
+        verificationCode,
+      });
+
+      // 토큰 저장
+      localStorage.setItem("accessToken", tokenResponse.accessToken);
+      localStorage.setItem("refreshToken", tokenResponse.refreshToken);
+
+      alert("회원가입이 완료되었습니다.");
+      router.push("/");
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      alert(errorMessage);
+    }
   };
 
   const isFormValid =
@@ -172,7 +185,8 @@ export default function SignupPage() {
     hasNumber &&
     hasSpecialChar &&
     isPasswordLengthValid &&
-    isPasswordMatch;
+    isPasswordMatch &&
+    major !== "";
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center py-24">
@@ -635,14 +649,14 @@ export default function SignupPage() {
                 <div className="absolute top-full left-8 right-8 mt-1 bg-white border border-[#c7cacf] rounded-lg shadow-lg z-10 max-h-[200px] overflow-y-auto">
                   {majors.map((m) => (
                     <button
-                      key={m}
+                      key={m.value}
                       onClick={() => {
-                        setMajor(m);
+                        setMajor(m.label);
                         setShowMajorDropdown(false);
                       }}
                       className="w-full px-4 py-3 body-m-regular text-[#101010] text-left hover:bg-[#f0f2f5] transition-colors"
                     >
-                      {m}
+                      {m.label}
                     </button>
                   ))}
                 </div>

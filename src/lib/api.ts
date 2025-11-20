@@ -3,11 +3,19 @@ import axiosInstance from "./axios";
 /**
  * API 응답 타입
  */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;
   error?: string;
+}
+
+/**
+ * 토큰 응답 타입
+ */
+export interface TokenResponseDto {
+  accessToken: string;
+  refreshToken: string;
 }
 
 /**
@@ -25,13 +33,17 @@ export const authAPI = {
 
   // 회원가입
   signup: async (data: {
-    studentId: string;
+    mjuId: string;
     name: string;
     email: string;
     password: string;
     major: string;
+    verificationCode: string;
   }) => {
-    const response = await axiosInstance.post<ApiResponse>("/auth/signup", data);
+    const response = await axiosInstance.post<TokenResponseDto>(
+      "/api/auth/signup",
+      data
+    );
     return response.data;
   },
 
@@ -184,15 +196,24 @@ export const chatAPI = {
 /**
  * 에러 핸들링 유틸리티
  */
-export const handleApiError = (error: any): string => {
-  if (error.response) {
-    // 서버 응답이 있는 경우
-    return error.response.data?.message || "서버 오류가 발생했습니다.";
-  } else if (error.request) {
-    // 요청은 전송되었으나 응답이 없는 경우
-    return "서버와 연결할 수 없습니다.";
-  } else {
-    // 요청 설정 중 오류 발생
-    return error.message || "알 수 없는 오류가 발생했습니다.";
+export const handleApiError = (error: unknown): string => {
+  if (typeof error === "object" && error !== null) {
+    const err = error as {
+      response?: { data?: { message?: string } };
+      request?: unknown;
+      message?: string;
+    };
+
+    if (err.response) {
+      // 서버 응답이 있는 경우
+      return err.response.data?.message || "서버 오류가 발생했습니다.";
+    } else if (err.request) {
+      // 요청은 전송되었으나 응답이 없는 경우
+      return "서버와 연결할 수 없습니다.";
+    } else if (err.message) {
+      // 요청 설정 중 오류 발생
+      return err.message;
+    }
   }
+  return "알 수 없는 오류가 발생했습니다.";
 };
