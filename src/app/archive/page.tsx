@@ -85,50 +85,52 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* 상단 헤더 */}
       <PageHeader title="강의 보관함" showClose onClose={handleClose} />
 
-      {/* 검색 입력창 */}
-      <div className="px-5 py-2">
-        <SearchInput
-          value={searchQuery}
-          onChange={setSearchQuery}
-          onClear={handleClearSearch}
-          placeholder="검색어를 입력하세요"
-        />
-      </div>
-
-      {/* 검색 결과 */}
-      <div className="flex-1 overflow-y-auto pb-[300px]">
-        {searchResults.map((result) => (
-          <SearchResultItem
-            key={result}
-            text={result}
-            favorite={myClasses.includes(result)}
-            onToggleFavorite={() => handleSearchResultClick(result)}
-            onClick={() => handleSearchResultClick(result)}
+      <div className="max-w-[520px] mx-auto w-full flex-1 flex flex-col relative">
+        {/* 검색 입력창 */}
+        <div className="px-5 py-2">
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onClear={handleClearSearch}
+            placeholder="검색어를 입력하세요"
           />
-        ))}
-      </div>
+        </div>
 
-      {/* 하단 바텀시트 */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <BottomSheet
-          title="내 강의"
-          isExpanded={isBottomSheetExpanded}
-          onToggle={() => setIsBottomSheetExpanded(!isBottomSheetExpanded)}
-        >
-          {myClasses.map((className) => (
-            <MyClassItem
-              key={className}
-              name={className}
-              favorite={true}
-              onToggleFavorite={() => handleRemoveFromMyClass(className)}
-              onClick={() => handleRemoveFromMyClass(className)}
+        {/* 검색 결과 */}
+        <div className="flex-1 overflow-y-auto pb-[300px]">
+          {searchResults.map((result) => (
+            <SearchResultItem
+              key={result}
+              text={result}
+              favorite={myClasses.includes(result)}
+              onToggleFavorite={() => handleSearchResultClick(result)}
+              onClick={() => handleSearchResultClick(result)}
             />
           ))}
-        </BottomSheet>
+        </div>
+
+        {/* 하단 바텀시트 */}
+        <div className="absolute bottom-0 left-0 right-0 w-full">
+          <BottomSheet
+            title="내 강의"
+            isExpanded={isBottomSheetExpanded}
+            onToggle={() => setIsBottomSheetExpanded(!isBottomSheetExpanded)}
+          >
+            {myClasses.map((className) => (
+              <MyClassItem
+                key={className}
+                name={className}
+                favorite={true}
+                onToggleFavorite={() => handleRemoveFromMyClass(className)}
+                onClick={() => handleRemoveFromMyClass(className)}
+              />
+            ))}
+          </BottomSheet>
+        </div>
       </div>
     </div>
   );
