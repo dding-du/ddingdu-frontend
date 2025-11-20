@@ -77,6 +77,7 @@ interface ChatInputProps {
   onSend?: () => void;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -89,9 +90,10 @@ export function ChatInput({
   onSend,
   placeholder = "강의정보 무엇이든 물어보세요",
   className = "",
+  disabled = false,
 }: ChatInputProps) {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !disabled) {
       e.preventDefault();
       onSend?.();
     }
@@ -99,7 +101,9 @@ export function ChatInput({
 
   return (
     <div
-      className={`bg-[#f0f2f5] border border-[#dcdfe3] flex items-center gap-2 pl-4 pr-1 py-[10px] h-10 rounded-full ${className}`}
+      className={`bg-[#f0f2f5] border border-[#dcdfe3] flex items-center gap-2 pl-4 pr-1 py-[10px] h-10 rounded-full ${
+        disabled ? "opacity-60" : ""
+      } ${className}`}
     >
       <input
         type="text"
@@ -107,11 +111,13 @@ export function ChatInput({
         onChange={(e) => onChange?.(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder={placeholder}
-        className="flex-1 bg-transparent body-l-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
+        disabled={disabled}
+        className="flex-1 bg-transparent body-l-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none disabled:cursor-not-allowed"
       />
       <button
         onClick={onSend}
-        className="w-[42.667px] h-[42.667px] flex items-center justify-center shrink-0"
+        disabled={disabled}
+        className="w-[42.667px] h-[42.667px] flex items-center justify-center shrink-0 disabled:cursor-not-allowed"
         aria-label="전송"
         type="button"
       >

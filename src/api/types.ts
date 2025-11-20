@@ -45,3 +45,10 @@ export interface UserInfoResponseDto {
   email: string;
   major: string;
 }
+
+/**
+ * 챗봇 응답 타입
+ */
+export interface ChatResponseDto {
+  message: string;
+}

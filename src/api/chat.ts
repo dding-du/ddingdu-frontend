@@ -1,5 +1,5 @@
-import axiosInstance from '@/lib/axios';
-import type { ApiResponse } from './types';
+import axiosInstance from "@/lib/axios";
+import type { ApiResponse, ChatResponseDto } from "./types";
 
 /**
  * 챗봇 API
@@ -7,15 +7,13 @@ import type { ApiResponse } from './types';
 export const chatAPI = {
   // 메시지 전송
   sendMessage: async (message: string) => {
-    const response = await axiosInstance.post<ApiResponse>('/chat/message', {
-      message,
-    });
-    return response.data;
-  },
-
-  // 채팅 기록 조회
-  getChatHistory: async () => {
-    const response = await axiosInstance.get<ApiResponse>('/chat/history');
+    const response = await axiosInstance.post<ApiResponse<ChatResponseDto>>(
+      "/api/chat/stream/test",
+      {
+        userId: 2,
+        message,
+      }
+    );
     return response.data;
   },
 };

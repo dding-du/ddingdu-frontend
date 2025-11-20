@@ -1,5 +1,6 @@
 "use client";
 
+import { chatAPI } from "@/api";
 import {
   BotMessage,
   ChatInput,
@@ -9,13 +10,28 @@ import {
 import { Header } from "@/components/common/Header";
 import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
+
+interface Message {
+  type: "user" | "bot";
+  content: any;
+  timestamp: number;
+}
 
 export default function Home() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      type: "bot",
+      content:
+        "안녕하세요😋\n명지대학교 강의정보 챗봇 OO이에요!\n\nOO님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!\n얼마든지 물어보세요~",
+      timestamp: Date.now(),
+    },
+  ]);
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   // 인증 체크
   useEffect(() => {
@@ -30,15 +46,61 @@ export default function Home() {
     }
   }, [router]);
 
+  const sendMessage = async (text: string) => {
+    if (!text.trim()) return;
+
+    setIsSendingMessage(true);
+
+    // 사용자 메시지 추가
+    const userMessage: Message = {
+      type: "user",
+      content: text,
+      timestamp: Date.now(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      // API 호출
+      const response = await chatAPI.sendMessage(text);
+
+      console.log(response);
+
+      // 봇 응답 추가
+      const botMessage: Message = {
+        type: "bot",
+        content:
+          response.data?.message ||
+          response.message ||
+          response ||
+          "응답을 받지 못했습니다.",
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      // 에러 메시지 추가
+      const errorMessage: Message = {
+        type: "bot",
+        content: "죄송합니다. 메시지 전송에 실패했습니다. 다시 시도해주세요.",
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      console.error("메시지 전송 오류:", error);
+    } finally {
+      setIsSendingMessage(false);
+    }
+  };
+
   const handleSend = () => {
-    if (inputValue.trim()) {
-      console.log("전송:", inputValue);
+    if (inputValue.trim() && !isSendingMessage) {
+      sendMessage(inputValue);
       setInputValue("");
     }
   };
 
   const handleChipClick = (text: string) => {
-    console.log("추천 질문 클릭:", text);
+    if (!isSendingMessage) {
+      sendMessage(text);
+    }
   };
 
   // 로딩 중이거나 인증되지 않은 경우 빈 화면 표시
@@ -56,35 +118,45 @@ export default function Home() {
         {/* 채팅 영역 */}
         <main className="flex-1 px-5 pb-32 overflow-y-auto">
           <div className="flex flex-col gap-1">
-            {/* 봇 초기 메시지 */}
+            {/* 봇 초기 이미지 */}
             <img src="/bot.svg" alt="botImage" className="w-[76px] h-[54px]" />
-            <BotMessage>
-              <p className="mb-0">안녕하세요😋</p>
-              <p className="mb-0">명지대학교 강의정보 챗봇 OO이에요!</p>
-              <p className="mb-0">&nbsp;</p>
-              <p className="mb-0">
-                OO님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!
-              </p>
-              <p>얼마든지 물어보세요~</p>
-            </BotMessage>
 
-            {/* 사용자 메시지 1 */}
-            <UserMessage>중간고사 없는 융소 전공 과목 알려줘</UserMessage>
+            {/* 메시지 목록 */}
+            {messages.map((message, index) => {
+              if (message.type === "bot") {
+                return (
+                  <BotMessage key={message.timestamp + index}>
+                    {message.content
+                      .split("\n")
+                      .map((line: string, i: Key | null | undefined) => (
+                        <p
+                          key={i}
+                          className={
+                            i === message.content.split("\n").length - 1
+                              ? ""
+                              : "mb-0"
+                          }
+                        >
+                          {line || "\u00A0"}
+                        </p>
+                      ))}
+                  </BotMessage>
+                );
+              } else {
+                return (
+                  <UserMessage key={message.timestamp + index}>
+                    {message.content}
+                  </UserMessage>
+                );
+              }
+            })}
 
-            {/* 봇 응답 1 */}
-            <BotMessage>
-              <p className="mb-0">
-                중간고사가 없는 융소 전공 과목은 다음과 같습니다.
-              </p>
-              <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
-              <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
-              <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
-              <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
-              <p>OOO 교수님 - OOOOOOOOO</p>
-            </BotMessage>
-
-            {/* 사용자 메시지 2 */}
-            <UserMessage>AI 관련 수업 전부 찾아줘</UserMessage>
+            {/* 로딩 중 표시 */}
+            {isSendingMessage && (
+              <BotMessage>
+                <p className="mb-0">답변을 생성하고 있습니다...</p>
+              </BotMessage>
+            )}
           </div>
         </main>
 
@@ -119,6 +191,7 @@ export default function Home() {
               onChange={setInputValue}
               onSend={handleSend}
               placeholder="강의정보 무엇이든 물어보세요"
+              disabled={isSendingMessage}
             />
           </div>
         </div>
