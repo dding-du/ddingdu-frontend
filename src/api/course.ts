@@ -79,18 +79,19 @@ export const courseAPI = {
   },
 
   // 강의 보관 (수강정보 추가)
-  takeLecture: async (lectureId: number) => {
-    const requestBody: TakeRequestDto = { lectureId };
+  takeLecture: async (lectureId: number, userId: number) => {
+    const requestBody: TakeRequestDto = { lectureId, userId };
     const response = await axiosInstance.post<ApiResponse>(
       "/api/takes",
       requestBody
     );
+    console.log(response);
     return response.data;
   },
 
   // 강의 보관 해제 (수강정보 삭제)
-  dropLecture: async (lectureId: number) => {
-    const requestBody: TakeRequestDto = { lectureId };
+  dropLecture: async (lectureId: number, userId: number) => {
+    const requestBody: TakeRequestDto = { lectureId, userId };
     const response = await axiosInstance.delete<ApiResponse>("/api/takes", {
       data: requestBody,
     });

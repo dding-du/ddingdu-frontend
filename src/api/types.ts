@@ -20,6 +20,7 @@ export interface TokenResponseDto {
  * 강의 응답 타입
  */
 export interface LectureResponseDto {
+  id: number;
   lectureId: number;
   lectureName: string;
   professorName: string;
@@ -34,6 +35,7 @@ export interface LectureResponseDto {
  */
 export interface TakeRequestDto {
   lectureId: number;
+  userId: number;
 }
 
 /**
@@ -51,6 +53,7 @@ export interface UserInfoResponseDto {
  * 수강 응답 타입
  */
 export interface TakeResponseDto {
+  id: number;
   lectureId: number;
   lectureName: string;
   professorName: string;

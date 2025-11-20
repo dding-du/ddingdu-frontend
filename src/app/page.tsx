@@ -10,8 +10,7 @@ import {
 import { Header } from "@/components/common/Header";
 import { tokenManager } from "@/lib/axios";
 import { useRouter } from "next/navigation";
-import { Key, useEffect, useState } from "react";
-
+import { Key, useEffect, useRef, useState } from "react";
 interface Message {
   type: "user" | "bot";
   content: any;
@@ -109,6 +108,11 @@ export default function Home() {
       sendMessage(text);
     }
   };
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isSendingMessage]);
 
   // 로딩 중이거나 인증되지 않은 경우 빈 화면 표시
   if (isLoading || !isAuthenticated) {
@@ -164,6 +168,7 @@ export default function Home() {
                 <p className="mb-0">답변을 생성하고 있습니다...</p>
               </BotMessage>
             )}
+            <div ref={bottomRef} />
           </div>
         </main>
 

@@ -6,16 +6,11 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { SearchInput, SearchResultItem } from "@/components/search/Search";
 import { useEffect, useState } from "react";
 
-interface ClassInfo {
+interface ClassInfoWithId {
+  id: number;
   name: string;
   professor: string;
 }
-
-interface ClassInfoWithId extends ClassInfo {
-  lectureId: number;
-}
-
-type DisplayListItem = ClassInfo | ClassInfoWithId;
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,25 +27,6 @@ export default function SearchPage() {
 
   // 내 강의 이름 목록 (기존 로직 호환성 유지)
   const myClasses = myLectures.map((lecture) => lecture.lectureName);
-
-  // 검색 가능한 전체 강의 목록 (교수 이름 포함)
-  const allClasses: ClassInfo[] = [
-    { name: "4차산업혁명을위한비판적사고", professor: "권향숙" },
-    { name: "기독교와문화", professor: "김제민" },
-    { name: "기초프로그래밍2", professor: "이강선" },
-    { name: "문화리터러시와창의적스토리텔링", professor: "이영아" },
-    { name: "영어회화1", professor: "메이어호퍼" },
-    { name: "영어2", professor: "전미경" },
-    { name: "인공지능의세계", professor: "김제민" },
-    { name: "채플", professor: "교목실S" },
-    { name: "환경과웰빙(KCU)", professor: "김한수" },
-    { name: "인공지능", professor: "홍길동" },
-    { name: "인공지능 윤리", professor: "박영희" },
-    { name: "데이터구조", professor: "이철수" },
-    { name: "알고리즘", professor: "김영수" },
-    { name: "웹프로그래밍", professor: "박지성" },
-    { name: "모바일프로그래밍", professor: "손흥민" },
-  ];
 
   // 검색 API 호출
   useEffect(() => {
@@ -114,31 +90,39 @@ export default function SearchPage() {
   }, []);
 
   // 화면에 표시할 리스트 (검색어가 없으면 내 강의, 있으면 검색 결과)
-  const displayList: DisplayListItem[] =
+  const displayList: ClassInfoWithId[] =
     searchQuery.trim() === ""
-      ? allClasses.filter((c) => myClasses.includes(c.name))
+      ? myLectures.map(
+          (lecture): ClassInfoWithId => ({
+            name: lecture.lectureName,
+            professor: lecture.professorName,
+            id: lecture.id,
+          })
+        )
       : searchResults.map(
           (lecture): ClassInfoWithId => ({
             name: lecture.lectureName,
             professor: lecture.professorName,
-            lectureId: lecture.lectureId,
+            id: lecture.id,
           })
         );
 
   // 검색 결과를 내 강의에 추가
-  const handleAddToMyClass = async (classInfo: DisplayListItem) => {
-    // lectureId가 있는 경우에만 API 호출
-    if ("lectureId" in classInfo && classInfo.lectureId) {
+  const handleAddToMyClass = async (classInfo: ClassInfoWithId) => {
+    // userId가 있는 경우에만 API 호출
+    if (userId !== null) {
       try {
-        await courseAPI.takeLecture(classInfo.lectureId);
+        console.log(classInfo);
+        await courseAPI.takeLecture(classInfo.id, userId);
         // API 성공 시에만 로컬 상태 업데이트
         if (!myClasses.includes(classInfo.name)) {
           // 새로운 강의 객체 생성하여 추가
           const newLecture: TakeResponseDto = {
-            lectureId: classInfo.lectureId,
+            id: classInfo.id,
             lectureName: classInfo.name,
             professorName: classInfo.professor,
-            lectureCode: "", // 검색 결과에서는 강좌번호가 없을 수 있음
+            lectureCode: "",
+            lectureId: 0,
           };
           setMyLectures((prev) => [...prev, newLecture]);
           console.log(`"${classInfo.name}" 강의를 내 강의에 추가했습니다.`);
@@ -152,14 +136,14 @@ export default function SearchPage() {
   };
 
   // 내 강의에서 제거
-  const handleRemoveFromMyClass = async (classInfo: DisplayListItem) => {
-    // lectureId가 있는 경우에만 API 호출
-    if ("lectureId" in classInfo && classInfo.lectureId) {
+  const handleRemoveFromMyClass = async (classInfo: ClassInfoWithId) => {
+    // userId가 있는 경우에만 API 호출
+    if (userId !== null) {
       try {
-        await courseAPI.dropLecture(classInfo.lectureId);
+        await courseAPI.dropLecture(classInfo.id, userId);
         // API 성공 시에만 로컬 상태 업데이트
         setMyLectures((prev) =>
-          prev.filter((lecture) => lecture.lectureId !== classInfo.lectureId)
+          prev.filter((lecture) => lecture.lectureId !== classInfo.id)
         );
         console.log(`"${classInfo.name}" 강의를 내 강의에서 제거했습니다.`);
       } catch (error) {
@@ -171,7 +155,7 @@ export default function SearchPage() {
   };
 
   // 검색 결과 항목 클릭 시: 내 강의에 추가/제거 토글
-  const handleSearchResultClick = (classInfo: DisplayListItem) => {
+  const handleSearchResultClick = (classInfo: ClassInfoWithId) => {
     if (myClasses.includes(classInfo.name)) {
       handleRemoveFromMyClass(classInfo);
     } else {
