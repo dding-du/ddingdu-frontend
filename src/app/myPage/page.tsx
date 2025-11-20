@@ -138,7 +138,7 @@ export default function MyPage() {
               className="flex items-center justify-between px-8 py-4 hover:bg-[#f0f2f5] transition-colors"
             >
               <span className="flex flex-start body-l-regular text-[#101010]">
-                비밀번호
+                비밀번호 변경
               </span>
               <div className="flex items-center gap-4">
                 <span className="body-m-regular text-[#101010]">●●●●●●●●●</span>
