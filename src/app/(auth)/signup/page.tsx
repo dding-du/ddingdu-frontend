@@ -322,11 +322,13 @@ export default function SignupPage() {
                     maxLength={6}
                     className="flex-1 bg-transparent body-m-regular text-[#101010] placeholder:text-[#b3b7bd] outline-none"
                   />
-                  <span className="caption-m-regular text-[#f93838]">
-                    {Math.floor(timeLeft / 60)}:
-                    {String(timeLeft % 60).padStart(2, "0")}
-                  </span>
-                  {verificationCode && (
+                  {!isVerified && (
+                    <span className="caption-m-regular text-[#f93838]">
+                      {Math.floor(timeLeft / 60)}:
+                      {String(timeLeft % 60).padStart(2, "0")}
+                    </span>
+                  )}
+                  {verificationCode && !isVerified && (
                     <button
                       onClick={handleVerificationCodeClear}
                       className="w-[13.5px] h-[13.5px] flex items-center justify-center shrink-0"
