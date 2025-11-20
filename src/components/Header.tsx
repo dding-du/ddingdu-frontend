@@ -34,10 +34,11 @@ export function Header({
   return (
     <header
       className={`
+        fixed top-0 left-0 right-0
         bg-white
         shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)]
         flex items-center justify-between
-        px-5 pt-6 pb-3
+        h-[60px] px-5
         w-full
         ${className}
       `}

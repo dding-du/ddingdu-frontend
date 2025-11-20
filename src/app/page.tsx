@@ -32,14 +32,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white  flex flex-col">
       {/* 헤더 */}
       <Header serviceName="MyPlace" />
 
       {/* 채팅 영역 */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 px-5 mt-20 overflow-y-auto">
         <div className="flex flex-col gap-1">
           {/* 봇 초기 메시지 */}
+          <img src="/bot.svg" alt="botImage" className="w-[76px] h-[54px]" />
           <BotMessage>
             <p className="mb-0">안녕하세요😋</p>
             <p className="mb-0">명지대학교 강의정보 챗봇 OO이에요!</p>
