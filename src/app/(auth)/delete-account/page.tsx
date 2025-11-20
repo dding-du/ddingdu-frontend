@@ -1,5 +1,6 @@
 "use client";
 
+import { authAPI, handleApiError } from "@/api";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -17,17 +18,24 @@ function DeleteAccountContent() {
     if (error) setError(""); // 입력 시 에러 메시지 제거
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!password) {
       setError("비밀번호를 입력해 주세요");
       return;
     }
 
-    // TODO: 비밀번호 확인 API 호출
-    // 비밀번호 확인 성공 시 최종 확인 페이지로 이동
-    router.push(
-      `${type === "myPage" ? "change-password" : "/delete-account-confirm"}`
-    );
+    try {
+      // 비밀번호 확인 API 호출
+      await authAPI.verifyPassword(password);
+
+      // 비밀번호 확인 성공 시 최종 확인 페이지로 이동
+      router.push(
+        `${type === "myPage" ? "change-password" : "/delete-account-confirm"}`
+      );
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setError(errorMessage);
+    }
   };
 
   const handleFindPassword = () => {

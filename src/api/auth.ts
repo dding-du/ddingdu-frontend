@@ -102,6 +102,17 @@ export const authAPI = {
     return response.data;
   },
 
+  // 비밀번호 확인
+  verifyPassword: async (password: string) => {
+    const response = await axiosInstance.post<string>(
+      "/api/auth/verify-password",
+      {
+        password,
+      }
+    );
+    return response.data;
+  },
+
   // 리프래쉬
   refresh: async () => {
     const refreshToken = tokenManager.getRefreshToken();

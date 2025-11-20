@@ -11,6 +11,9 @@ interface ClassInfo {
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchType, setSearchType] = useState<"name" | "professor" | "code">(
+    "name"
+  );
 
   // 내 강의 목록 상태 (동적으로 추가/제거 가능)
   const [myClasses, setMyClasses] = useState<string[]>([
