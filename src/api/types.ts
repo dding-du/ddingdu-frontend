@@ -28,3 +28,10 @@ export interface LectureResponseDto {
   credits?: number;
   semester?: string;
 }
+
+/**
+ * 수강 요청 타입
+ */
+export interface TakeRequestDto {
+  lectureId: number;
+}

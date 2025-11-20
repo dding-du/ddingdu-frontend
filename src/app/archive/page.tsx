@@ -105,25 +105,57 @@ export default function SearchPage() {
         );
 
   // 검색 결과를 내 강의에 추가
-  const handleAddToMyClass = (className: string) => {
-    if (!myClasses.includes(className)) {
-      setMyClasses((prev) => [...prev, className]);
-      console.log(`"${className}" 강의를 내 강의에 추가했습니다.`);
+  const handleAddToMyClass = async (classInfo: DisplayListItem) => {
+    // lectureId가 있는 경우에만 API 호출
+    if ("lectureId" in classInfo && classInfo.lectureId) {
+      try {
+        await courseAPI.takeLecture(classInfo.lectureId);
+        // API 성공 시에만 로컬 상태 업데이트
+        if (!myClasses.includes(classInfo.name)) {
+          setMyClasses((prev) => [...prev, classInfo.name]);
+          console.log(`"${classInfo.name}" 강의를 내 강의에 추가했습니다.`);
+        }
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        console.error("강의 추가 오류:", errorMessage);
+        alert(`강의 추가에 실패했습니다: ${errorMessage}`);
+      }
+    } else {
+      // lectureId가 없는 경우 로컬에서만 추가
+      if (!myClasses.includes(classInfo.name)) {
+        setMyClasses((prev) => [...prev, classInfo.name]);
+        console.log(`"${classInfo.name}" 강의를 내 강의에 추가했습니다.`);
+      }
     }
   };
 
   // 내 강의에서 제거
-  const handleRemoveFromMyClass = (className: string) => {
-    setMyClasses((prev) => prev.filter((c) => c !== className));
-    console.log(`"${className}" 강의를 내 강의에서 제거했습니다.`);
+  const handleRemoveFromMyClass = async (classInfo: DisplayListItem) => {
+    // lectureId가 있는 경우에만 API 호출
+    if ("lectureId" in classInfo && classInfo.lectureId) {
+      try {
+        await courseAPI.dropLecture(classInfo.lectureId);
+        // API 성공 시에만 로컬 상태 업데이트
+        setMyClasses((prev) => prev.filter((c) => c !== classInfo.name));
+        console.log(`"${classInfo.name}" 강의를 내 강의에서 제거했습니다.`);
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        console.error("강의 제거 오류:", errorMessage);
+        alert(`강의 제거에 실패했습니다: ${errorMessage}`);
+      }
+    } else {
+      // lectureId가 없는 경우 로컬에서만 제거
+      setMyClasses((prev) => prev.filter((c) => c !== classInfo.name));
+      console.log(`"${classInfo.name}" 강의를 내 강의에서 제거했습니다.`);
+    }
   };
 
   // 검색 결과 항목 클릭 시: 내 강의에 추가/제거 토글
-  const handleSearchResultClick = (className: string) => {
-    if (myClasses.includes(className)) {
-      handleRemoveFromMyClass(className);
+  const handleSearchResultClick = (classInfo: DisplayListItem) => {
+    if (myClasses.includes(classInfo.name)) {
+      handleRemoveFromMyClass(classInfo);
     } else {
-      handleAddToMyClass(className);
+      handleAddToMyClass(classInfo);
     }
   };
 
@@ -263,10 +295,8 @@ export default function SearchPage() {
                   text={classInfo.name}
                   professor={classInfo.professor}
                   favorite={myClasses.includes(classInfo.name)}
-                  onToggleFavorite={() =>
-                    handleSearchResultClick(classInfo.name)
-                  }
-                  onClick={() => handleSearchResultClick(classInfo.name)}
+                  onToggleFavorite={() => handleSearchResultClick(classInfo)}
+                  onClick={() => handleSearchResultClick(classInfo)}
                 />
               );
             })}

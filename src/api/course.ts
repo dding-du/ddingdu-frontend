@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios";
-import type { ApiResponse, LectureResponseDto } from "./types";
+import type { ApiResponse, LectureResponseDto, TakeRequestDto } from "./types";
 
 /**
  * 강의 API
@@ -62,6 +62,25 @@ export const courseAPI = {
     const response = await axiosInstance.delete<ApiResponse>(
       `/courses/${courseId}/favorite`
     );
+    return response.data;
+  },
+
+  // 강의 보관 (수강정보 추가)
+  takeLecture: async (lectureId: number) => {
+    const requestBody: TakeRequestDto = { lectureId };
+    const response = await axiosInstance.post<ApiResponse>(
+      "/api/takes",
+      requestBody
+    );
+    return response.data;
+  },
+
+  // 강의 보관 해제 (수강정보 삭제)
+  dropLecture: async (lectureId: number) => {
+    const requestBody: TakeRequestDto = { lectureId };
+    const response = await axiosInstance.delete<ApiResponse>("/api/takes", {
+      data: requestBody,
+    });
     return response.data;
   },
 };
