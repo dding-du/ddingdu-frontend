@@ -15,3 +15,16 @@ export interface TokenResponseDto {
   accessToken: string;
   refreshToken: string;
 }
+
+/**
+ * 강의 응답 타입
+ */
+export interface LectureResponseDto {
+  lectureId: number;
+  lectureName: string;
+  professorName: string;
+  lectureCode: string;
+  department?: string;
+  credits?: number;
+  semester?: string;
+}

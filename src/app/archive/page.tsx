@@ -1,19 +1,29 @@
 "use client";
 
+import { courseAPI, handleApiError } from "@/api";
+import type { LectureResponseDto } from "@/api/types";
 import { PageHeader } from "@/components/common/PageHeader";
 import { SearchInput, SearchResultItem } from "@/components/search/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ClassInfo {
   name: string;
   professor: string;
 }
 
+interface ClassInfoWithId extends ClassInfo {
+  lectureId: number;
+}
+
+type DisplayListItem = ClassInfo | ClassInfoWithId;
+
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState<"name" | "professor" | "code">(
     "name"
   );
+  const [searchResults, setSearchResults] = useState<LectureResponseDto[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 내 강의 목록 상태 (동적으로 추가/제거 가능)
   const [myClasses, setMyClasses] = useState<string[]>([
@@ -47,23 +57,52 @@ export default function SearchPage() {
     { name: "모바일프로그래밍", professor: "손흥민" },
   ];
 
-  // 검색어에 맞는 강의 필터링
-  const searchResults = allClasses.filter((classInfo) => {
-    const query = searchQuery.toLowerCase();
-    if (searchType === "name") {
-      return classInfo.name.toLowerCase().includes(query);
-    } else if (searchType === "professor") {
-      return classInfo.professor.toLowerCase().includes(query);
-    }
-    // searchType === "code" - 강좌번호는 현재 데이터에 없으므로 빈 결과
-    return false;
-  });
+  // 검색 API 호출
+  useEffect(() => {
+    const performSearch = async () => {
+      if (!searchQuery.trim()) {
+        setSearchResults([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        let results: LectureResponseDto[] = [];
+
+        if (searchType === "name") {
+          results = await courseAPI.searchByLectureName(searchQuery);
+        } else if (searchType === "professor") {
+          results = await courseAPI.searchByProfessor(searchQuery);
+        } else if (searchType === "code") {
+          results = await courseAPI.searchByLectureCode(searchQuery);
+        }
+
+        setSearchResults(results);
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        console.error("검색 오류:", errorMessage);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // 디바운스: 500ms 후에 검색 실행
+    const timeoutId = setTimeout(performSearch, 500);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, searchType]);
 
   // 화면에 표시할 리스트 (검색어가 없으면 내 강의, 있으면 검색 결과)
-  const displayList =
+  const displayList: DisplayListItem[] =
     searchQuery.trim() === ""
       ? allClasses.filter((c) => myClasses.includes(c.name))
-      : searchResults;
+      : searchResults.map(
+          (lecture): ClassInfoWithId => ({
+            name: lecture.lectureName,
+            professor: lecture.professorName,
+            lectureId: lecture.lectureId,
+          })
+        );
 
   // 검색 결과를 내 강의에 추가
   const handleAddToMyClass = (className: string) => {
@@ -212,16 +251,25 @@ export default function SearchPage() {
         <div className="flex-1 overflow-y-auto pb-10">
           {displayList
             .sort((a, b) => a.name.localeCompare(b.name, "ko-KR"))
-            .map((classInfo) => (
-              <SearchResultItem
-                key={classInfo.name}
-                text={classInfo.name}
-                professor={classInfo.professor}
-                favorite={myClasses.includes(classInfo.name)}
-                onToggleFavorite={() => handleSearchResultClick(classInfo.name)}
-                onClick={() => handleSearchResultClick(classInfo.name)}
-              />
-            ))}
+            .map((classInfo, index) => {
+              const uniqueKey =
+                "lectureId" in classInfo && classInfo.lectureId
+                  ? `lecture-${classInfo.lectureId}`
+                  : `local-${classInfo.name}-${classInfo.professor}-${index}`;
+
+              return (
+                <SearchResultItem
+                  key={uniqueKey}
+                  text={classInfo.name}
+                  professor={classInfo.professor}
+                  favorite={myClasses.includes(classInfo.name)}
+                  onToggleFavorite={() =>
+                    handleSearchResultClick(classInfo.name)
+                  }
+                  onClick={() => handleSearchResultClick(classInfo.name)}
+                />
+              );
+            })}
         </div>
       </div>
     </div>
