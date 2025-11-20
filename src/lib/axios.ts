@@ -131,24 +131,41 @@ axiosInstance.interceptors.response.use(
 
       try {
         // 토큰 갱신 API 호출 (axiosInstance 사용하지 않음 - 순환 참조 방지)
-        const response = await axios.post<{
-          accessToken: string;
-          refreshToken: string;
-        }>(`${API_BASE_URL}/api/auth/refresh`, { refreshToken });
+        console.log("토큰 갱신 시도 중...");
+        const response = await axios.post(
+          `${API_BASE_URL}/api/auth/refresh`,
+          { refreshToken },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
+        console.log("토큰 갱신 응답:", response.data);
+
+        // API 응답 구조에 따라 토큰 추출
+        const newAccessToken =
+          response.data.accessToken || response.data.data?.accessToken;
+        const newRefreshToken =
+          response.data.refreshToken || response.data.data?.refreshToken;
+
+        if (!newAccessToken || !newRefreshToken) {
+          throw new Error("토큰 갱신 응답에 토큰이 없습니다");
+        }
 
         // 새 토큰 저장
-        tokenManager.setTokens(accessToken, newRefreshToken);
+        tokenManager.setTokens(newAccessToken, newRefreshToken);
 
         // 대기 중인 요청들 처리
-        processQueue(null, accessToken);
+        processQueue(null, newAccessToken);
 
         // 원래 요청 재시도
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // 토큰 갱신 실패 시 로그아웃
+        console.error("토큰 갱신 실패:", refreshError);
         processQueue(refreshError, null);
         tokenManager.clearTokens();
         if (typeof window !== "undefined") {
