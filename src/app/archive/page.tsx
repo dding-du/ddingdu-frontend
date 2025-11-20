@@ -115,7 +115,10 @@ export default function SearchPage() {
         console.log(classInfo);
         await courseAPI.takeLecture(classInfo.id, userId);
         // API 성공 시에만 로컬 상태 업데이트
-        if (!myClasses.includes(classInfo.name)) {
+        const isAlreadyAdded = myLectures.some(
+          (lecture) => lecture.id === classInfo.id
+        );
+        if (!isAlreadyAdded) {
           // 새로운 강의 객체 생성하여 추가
           const newLecture: TakeResponseDto = {
             id: classInfo.id,
@@ -156,7 +159,10 @@ export default function SearchPage() {
 
   // 검색 결과 항목 클릭 시: 내 강의에 추가/제거 토글
   const handleSearchResultClick = (classInfo: ClassInfoWithId) => {
-    if (myClasses.includes(classInfo.name)) {
+    const isInMyLectures = myLectures.some(
+      (lecture) => lecture.id === classInfo.id
+    );
+    if (isInMyLectures) {
       handleRemoveFromMyClass(classInfo);
     } else {
       handleAddToMyClass(classInfo);
@@ -310,7 +316,9 @@ export default function SearchPage() {
                     key={uniqueKey}
                     text={classInfo.name}
                     professor={classInfo.professor}
-                    favorite={myClasses.includes(classInfo.name)}
+                    favorite={myLectures.some(
+                      (lecture) => lecture.id === classInfo.id
+                    )}
                     onToggleFavorite={() => handleSearchResultClick(classInfo)}
                   />
                 );
