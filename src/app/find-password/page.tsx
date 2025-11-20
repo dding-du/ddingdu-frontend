@@ -78,9 +78,8 @@ export default function FindPasswordPage() {
 
   const handleSendCode = async () => {
     try {
-      const message = isVerificationSent
-        ? await authAPI.resendVerificationCode(email)
-        : await authAPI.sendVerificationCode(email);
+      // 비밀번호 재설정 요청 API 사용 (재전송 기능 없음, 매번 새로 요청)
+      const message = await authAPI.requestPasswordReset(email);
 
       setIsVerificationSent(true);
       setTimeLeft(299);
