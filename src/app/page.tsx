@@ -1,65 +1,105 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import { Header } from '@/components/Header';
+import {
+  BotMessage,
+  UserMessage,
+  RecommendChip,
+  ChatInput,
+} from '@/components/ChatBot';
 
 export default function Home() {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleProfileClick = () => {
+    console.log('프로필 클릭');
+  };
+
+  const handleArchiveClick = () => {
+    console.log('보관함 클릭');
+  };
+
+  const handleSend = () => {
+    if (inputValue.trim()) {
+      console.log('전송:', inputValue);
+      setInputValue('');
+    }
+  };
+
+  const handleChipClick = (text: string) => {
+    console.log('추천 질문 클릭:', text);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* 헤더 */}
+      <Header
+        serviceName="MyPlace"
+        onProfileClick={handleProfileClick}
+        onArchiveClick={handleArchiveClick}
+      />
+
+      {/* 채팅 영역 */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-1">
+          {/* 봇 초기 메시지 */}
+          <BotMessage>
+            <p className="mb-0">안녕하세요😋</p>
+            <p className="mb-0">명지대학교 강의정보 챗봇 OO이에요!</p>
+            <p className="mb-0">&nbsp;</p>
+            <p className="mb-0">OO님 상황에 맞는 맞춤 정보를 드리기 위해 최선을 다할게요!</p>
+            <p>얼마든지 물어보세요~</p>
+          </BotMessage>
+
+          {/* 사용자 메시지 1 */}
+          <UserMessage>중간고사 없는 융소 전공 과목 알려줘</UserMessage>
+
+          {/* 봇 응답 1 */}
+          <BotMessage>
+            <p className="mb-0">중간고사가 없는 융소 전공 과목은 다음과 같습니다.</p>
+            <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
+            <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
+            <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
+            <p className="mb-0">OOO 교수님 - OOOOOOOOO</p>
+            <p>OOO 교수님 - OOOOOOOOO</p>
+          </BotMessage>
+
+          {/* 사용자 메시지 2 */}
+          <UserMessage>AI 관련 수업 전부 찾아줘</UserMessage>
         </div>
       </main>
+
+      {/* 하단 고정 영역 */}
+      <div className="bg-white flex flex-col gap-1 pb-8">
+        {/* 추천 질문 칩들 */}
+        <div className="px-5 py-0">
+          <div className="flex gap-2 overflow-x-auto">
+            <RecommendChip
+              text="N/P 교양 강의 궁금해!"
+              onClick={() => handleChipClick('N/P 교양 강의 궁금해!')}
+            />
+            <RecommendChip
+              text="팀프로젝트 없는 교양 과목 알려줘"
+              onClick={() => handleChipClick('팀프로젝트 없는 교양 과목 알려줘')}
+            />
+            <RecommendChip
+              text="성적 F 처리 기준이 뭔지 알려줘!"
+              onClick={() => handleChipClick('성적 F 처리 기준이 뭔지 알려줘!')}
+            />
+          </div>
+        </div>
+
+        {/* 입력창 */}
+        <div className="bg-white px-5 py-2">
+          <ChatInput
+            value={inputValue}
+            onChange={setInputValue}
+            onSend={handleSend}
+            placeholder="강의정보 무엇이든 물어보세요"
+          />
+        </div>
+      </div>
     </div>
   );
 }
