@@ -122,4 +122,13 @@ export const authAPI = {
     );
     return response.data;
   },
+
+  // 비밀번호 변경 (로그인 상태)
+  updatePassword: async (newPassword: string, newPasswordConfirm: string) => {
+    const response = await axiosInstance.put<string>("/api/auth/password", {
+      newPassword,
+      newPasswordConfirm,
+    });
+    return response.data;
+  },
 };

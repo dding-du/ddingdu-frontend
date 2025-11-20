@@ -3,15 +3,13 @@
 import { authAPI, handleApiError } from "@/api";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// 마이페이지에서 들어온 비밀번호 재설정 페이지
-export default function FindPasswordPage() {
+// 마이페이지에서 들어온 비밀번호 변경 페이지
+export default function ChangePasswordPage() {
   const router = useRouter();
 
   // Form states
-  const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
@@ -20,30 +18,11 @@ export default function FindPasswordPage() {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   // Validation states
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
   const [hasEnglish, setHasEnglish] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
   const [hasSpecialChar, setHasSpecialChar] = useState(false);
   const [isPasswordLengthValid, setIsPasswordLengthValid] = useState(false);
   const [isPasswordMatch, setIsPasswordMatch] = useState(false);
-
-  // Timer and verification sent state
-  const [timeLeft, setTimeLeft] = useState(299); // 4:59
-  const [isVerificationSent, setIsVerificationSent] = useState(false);
-
-  // Timer effect
-  useEffect(() => {
-    if (isVerificationSent && timeLeft > 0 && !isVerified) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isVerificationSent, timeLeft, isVerified]);
-
-  const validateEmail = (email: string) => {
-    const isValid = /@mju\.ac\.kr$/.test(email);
-    setIsEmailValid(isValid);
-  };
 
   const validatePassword = (pwd: string) => {
     setHasEnglish(/[a-zA-Z]/.test(pwd));
@@ -54,12 +33,6 @@ export default function FindPasswordPage() {
 
   const validatePasswordMatch = (pwd: string, confirm: string) => {
     setIsPasswordMatch(pwd === confirm && pwd.length > 0);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    validateEmail(value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,40 +50,11 @@ export default function FindPasswordPage() {
     validatePasswordMatch(password, value);
   };
 
-  const handleSendCode = async () => {
-    try {
-      // 비밀번호 재설정 요청 API 사용 (재전송 기능 없음, 매번 새로 요청)
-      const message = await authAPI.requestPasswordReset(email);
-
-      setIsVerificationSent(true);
-      setTimeLeft(299);
-      alert(message);
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      alert(errorMessage);
-    }
-  };
-
-  const handleVerify = async () => {
-    try {
-      const message = await authAPI.verifyCode(email, verificationCode);
-      setIsVerified(true);
-      alert(message);
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      alert(errorMessage);
-    }
-  };
-
   const handleSubmit = async () => {
     try {
-      const message = await authAPI.resetPassword(
-        email,
-        verificationCode,
-        password
-      );
-      alert(message || "비밀번호가 재설정되었습니다.");
-      router.push("/login");
+      const message = await authAPI.updatePassword(password, passwordConfirm);
+      alert(message || "비밀번호가 변경되었습니다.");
+      router.push("/myPage");
     } catch (error) {
       const errorMessage = handleApiError(error);
       alert(errorMessage);
