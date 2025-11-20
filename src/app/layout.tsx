@@ -1,15 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const pretendard = localFont({
+  src: "../../public/fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const gmarket = localFont({
+  src: [
+    {
+      path: "../../public/fonts/GmarketSansTTFLight.ttf",
+      weight: "300",
+    },
+    {
+      path: "../../public/fonts/GmarketSansTTFMedium.ttf",
+      weight: "500",
+    },
+    {
+      path: "../../public/fonts/GmarketSansTTFBold.ttf",
+      weight: "700",
+    },
+  ],
+  display: "swap",
+  variable: "--font-gmarket",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${pretendard.variable} ${gmarket.variable} antialiased`}
       >
         {children}
       </body>
